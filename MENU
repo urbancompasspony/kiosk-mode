@@ -20,7 +20,10 @@ function checkB {
     VALUE1="https://time.is/S%C3%A3o_Paulo https://www.suitit.com.br"; VALUE2="10"; VALUE3="0"; VALUE4="0"; VALUE5="10"
   }
 
-  VALUE0=$(dialog --ok-label "Ajustar" --title "K I O S K" --form "WebSites: Enderecos separados com espaco serao alternados pela Duracao. \nDuracao: Tempo em segundos ate alternar os sites.\nZoomIn: Valores 110, 125, 150, 175, 200, 250 ou 300% \nZoomOut: Valores 90, 80, 75, 67, 50, 33 ou 25% \nEspera: Segundos antes do script comecar, para maquinas lentas. \n\nNunca habilite ZoomIn e ZoomOut ao mesmo tempo; deixe um campo em 0!\n " 20 75 0 \
+  VALUE0=$(dialog --ok-label "Ajustar" --title "K I O S K" --form "WebSites: Enderecos separados com espaco serao alternados pela Duracao. \n
+Duracao: Tempo em segundos ate alternar os sites.\nZoomIn: Valores 110, 125, 150, 175, 200, 250 ou 300% \n
+ZoomOut: Valores 90, 80, 75, 67, 50, 33 ou 25% \nEspera: Segundos antes do script comecar, para maquinas lentas. \n\n
+Nunca habilite ZoomIn e ZoomOut ao mesmo tempo; deixe um campo em 0!\n " 20 75 0 \
 "WebSites:" 1 1 "$VALUE1" 1 10 250 0 \
 "Duracao :" 2 1 "$VALUE2" 2 10 3 0 \
 "Zoom In :" 3 1 "$VALUE3" 3 10 4 0 \
@@ -42,19 +45,24 @@ function checkB {
   } || {
     echo "$var1" | tee /home/administrador/kiosk/Information > /home/administrador/kiosk/websites
     echo "$var2" | tee -a /home/administrador/kiosk/Information > /home/administrador/kiosk/duration
-    echo "$var3" | tee -a /home/administrador/kiosk/Information
-    echo "$var4" | tee -a /home/administrador/kiosk/Information
-    echo "$var5" | tee -a /home/administrador/kiosk/Information > /home/administrador/kiosk/waittime
 
     [ "$var3" = "0" ] || {
-      echo "$var3" > /home/administrador/kiosk/zoomin
-    } && { echo .>/dev/null; rm /home/administrador/kiosk/zoomin; }
+      echo "$var3" | tee /home/administrador/kiosk/zoomin
+    } && {
+      rm /home/administrador/kiosk/zoomin
+    }
+
+    echo "$var3" | tee -a /home/administrador/kiosk/Information
 
     [ "$var4" = "0" ] || {
-      echo "$var4" > /home/administrador/kiosk/zoomout
-    } && { echo .>/dev/null; rm /home/administrador/kiosk/zoomout; }
+      echo "$var4" | tee /home/administrador/kiosk/zoomout
+    } && {
+      rm /home/administrador/kiosk/zoomout
+    }
 
-    echo "$var5" | tee -a /home/administrador/kiosk/Information >> /home/administrador/kiosk/waittime
+    echo "$var4" | tee -a /home/administrador/kiosk/Information
+
+    echo "$var5" | tee -a /home/administrador/kiosk/Information > /home/administrador/kiosk/waittime
 
     sudo reboot
     }
