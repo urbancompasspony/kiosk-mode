@@ -1,39 +1,31 @@
 #!/bin/bash
 
-export var1; export var2; export var3; export var4; export var5; export var6; export var7; export var8
-
 function checkA {
-  [ "$EUID" -ne 0 ] && {
-    echo "Execute esse script como Root!"
+  [ "$EUID" -ne 0 ] || {
+    echo "Nao execute esse script como Root!"
     exit
     }
 }
 
-function check0 {
-  export var1; export var2; export var3; export var4; export var5; export var6; export var7; export var8
+function checkB {
+  export var1; export var2; export var3; export var4; export var5
 
-  [ -f "/srv/kiosk/Information" ] && {
-    VALUE1=$(sed -n '1p' /srv/kiosk/Information)
-    VALUE2=$(sed -n '2p' /srv/kiosk/Information)
-    VALUE3=$(sed -n '3p' /srv/kiosk/Information)
-    VALUE4=$(sed -n '4p' /srv/kiosk/Information)
-    VALUE5=$(sed -n '5p' /srv/kiosk/Information)
-    VALUE6=$(sed -n '6p' /srv/kiosk/Information)
-    VALUE7=$(sed -n '7p' /srv/kiosk/Information)
-    VALUE8=$(sed -n '8p' /srv/kiosk/Information)
+  [ -f "/home/administrador/kiosk/Information" ] && {
+    VALUE1=$(sed -n '1p' /home/administrador/kiosk/Information)
+    VALUE2=$(sed -n '2p' /home/administrador/kiosk/Information)
+    VALUE3=$(sed -n '3p' /home/administrador/kiosk/Information)
+    VALUE4=$(sed -n '4p' /home/administrador/kiosk/Information)
+    VALUE5=$(sed -n '5p' /home/administrador/kiosk/Information)
   } || {
-    VALUE1=" "; VALUE2=" "; VALUE3=" "; VALUE4=" "; VALUE5=" "; VALUE6=" "; VALUE7=" "; VALUE8=" "
+    VALUE1="https://time.is/S%C3%A3o_Paulo https://www.suitit.com.br"; VALUE2="10"; VALUE3="0"; VALUE4="0"; VALUE5="10"
   }
 
-  VALUE0=$(dialog --ok-label "Ajustar" --title "KIOSK" --form " " 15 50 0 \
-"F.Q.D.N.: " 1 1 "$VALUE1" 1 10 34 0 \
-"Local IP:" 2 1 "$VALUE2" 2 10 34 0 \
-"ADM Pass:" 3 1 "$VALUE3" 3 10 34 0 \
-"LAN DNS :" 4 1 "$VALUE4" 4 10 34 0 \
-"Hostname:" 5 1 "$VALUE5" 5 10 34 0 \
-"NetLAN  :" 6 1 "$VALUE6" 6 10 34 0 \
-"MNT Path:" 7 1 "$VALUE7" 7 10 50 0 \
-"CUPSPass:" 8 1 "$VALUE8" 8 10 50 0 \
+  VALUE0=$(dialog --ok-label "Ajustar" --title "K I O S K" --form "WebSites: Enderecos separados com espaco serao alternados pela Duracao. \nDuracao: Tempo em segundos ate alternar os sites.\nZoomIn: Valores 110, 125, 150, 175, 200, 250 ou 300% \nZoomOut: Valores 90, 80, 75, 67, 50, 33 ou 25% \nEspera: Segundos antes do script comecar, para maquinas lentas. \n\nNunca habilite ZoomIn e ZoomOut ao mesmo tempo; deixe um campo em 0!\n " 20 75 0 \
+"WebSites:" 1 1 "$VALUE1" 1 10 250 0 \
+"Duracao :" 2 1 "$VALUE2" 2 10 3 0 \
+"Zoom In :" 3 1 "$VALUE3" 3 10 4 0 \
+"Zoom Out:" 4 1 "$VALUE4" 4 10 4 0 \
+"Espera  :" 5 1 "$VALUE5" 5 10 3 0 \
 3>&1 1>&2 2>&3 3>&- > /dev/tty)
 
   [ $? -ne 0 ] && exit
@@ -43,18 +35,35 @@ function check0 {
   var3=$(echo "$VALUE0" | sed -n 3p)
   var4=$(echo "$VALUE0" | sed -n 4p)
   var5=$(echo "$VALUE0" | sed -n 5p)
-  var6=$(echo "$VALUE0" | sed -n 6p)
-  var7=$(echo "$VALUE0" | sed -n 7p)
-  var8=$(echo "$VALUE0" | sed -n 8p)
 
-  [ -z "$var1" ] || [ -z "$var2" ] || [ -z "$var3" ] || [ -z "$var4" ] || [ -z "$var5" ] || [ -z "$var6" ] || [ -z "$var7" ] || [ -z "$var8" ] && {
+  [ -z "$var1" ] || [ -z "$var2" ] || [ -z "$var3" ] || [ -z "$var4" ] || [ -z "$var5" ] && {
     dialog --title "ERRO" --msgbox "Não deixe nenhum campo vazio!" 8 40
-    menu
+    checkB
   } || {
-    checkC
+    echo "$var1" | tee /home/administrador/kiosk/Information > /home/administrador/kiosk/websites
+    echo "$var2" | tee -a /home/administrador/kiosk/Information >> /home/administrador/kiosk/duration
+
+    [ "$var3" = "0" ] || {
+      echo "$var3" | tee -a /home/administrador/kiosk/Information >> /home/administrador/kiosk/zoomin
+    } && { echo .>/dev/null; }
+
+    [ "$var4" = "0" ] || {
+      echo "$var4" | tee -a /home/administrador/kiosk/Information >> /home/administrador/kiosk/zoomout
+    } && { echo .>/dev/null; }
+
+    echo "$var5" | tee -a /home/administrador/kiosk/Information >> /home/administrador/kiosk/waittime
+
+    sudo killall chromium; sleep 3
+    sudo kill -9 $(cat /home/administrador/kiosk/pid_tab); sleep 1
+    killall openbox
+
+    export DISPLAY=:0.0; export XAUTHORITY=/home/administrador/.Xauthority
+    /etc/xdg/openbox/autostart
+    #startx
     }
 }
 
-check0
+checkA
+checkB
 
 exit 1
