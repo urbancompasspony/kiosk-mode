@@ -10,6 +10,7 @@ function checkA {
 function reb00t {
   dialog --title 'Reiniciar' --backtitle "Reinicio" --yesno 'Deseja reiniciar este sistema agora para aplicar as mudancas?' 0 0
   [ $? = 0 ] && {
+    clear; echo ""; echo "Digite a senha do usuario: "
     sudo reboot
   } || {
     echo "." >/dev/null
