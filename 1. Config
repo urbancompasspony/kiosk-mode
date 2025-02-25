@@ -42,7 +42,7 @@ chromium \
 --password-store=basic \
 --disable-pinch \
 --overscroll-history-navigation=disabled \
---disable-features=TouchpadOverscrollHistoryNavigation $(cat /home/administrador/websites) && kill -9 $(cat /home/administrador/pid_tab) && killall openbox
+--disable-features=TouchpadOverscrollHistoryNavigation $(cat /home/administrador/kiosk/websites) && kill -9 $(cat /home/administrador/kiosk/pid_tab) && killall openbox
 
 >>> >>> >>>
 3. Alternating Tabs!
@@ -53,16 +53,15 @@ export DISPLAY=:0.0; export XAUTHORITY=/home/administrador/.Xauthority
 
 function normal_run {
   while true; do
-    sleep $(cat /home/administrador/duration)
+    sleep $(cat /home/administrador/kiosk/duration)
     /usr/bin/xdotool key Ctrl+Tab
   done
 }
 
-sleep $(cat /home/administrador/waittime)
+sleep $(cat /home/administrador/kiosk/waittime)
 
-[ -f /home/administrador/zoomin ] && {
-  export DISPLAY=:0.0; export XAUTHORITY=/home/administrador/.Xauthority
-  value0=$(cat /home/administrador/zoomin)
+[ -f /home/administrador/kiosk/zoomin ] && {
+  value0=$(cat /home/administrador/kiosk/zoomin)
   [ "$value0" = 110 ] && { numero="1"; }
   [ "$value0" = 125 ] && { numero="2"; }
   [ "$value0" = 150 ] && { numero="3"; }
@@ -79,8 +78,7 @@ sleep $(cat /home/administrador/waittime)
   echo .>/dev/null
 }
 
-[ -f /home/administrador/zoomout ] && {
-  export DISPLAY=:0.0; export XAUTHORITY=/home/administrador/.Xauthority
+[ -f /home/administrador/kiosk/zoomout ] && {
   value1=$(cat /home/administrador/kiosk/zoomout)
   [ "$value1" = 90 ] && { numero="1"; }
   [ "$value1" = 80 ] && { numero="2"; }
