@@ -1,3 +1,4 @@
+>>>
 1. Ubuntu Server LTS - Set Default Config with Linite
 
 sudo wget 'https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x869689FE09306074' \
@@ -9,6 +10,7 @@ echo "deb https://freeshell.de/phd/chromium/$(lsb_release -sc) /" \
 sudo apt update
 sudo apt install chromium xdotool
 
+>>>
 2. Preparing OpenBox
 sudo nano /etc/xdg/openbox/autostart
 
@@ -42,6 +44,7 @@ chromium \
 --overscroll-history-navigation=disabled \
 --disable-features=TouchpadOverscrollHistoryNavigation $(cat ~/kiosk/websites) && kill -9 $(cat ~/kiosk/pid_tab) && killall openbox
 
+>>>
 3. Alternating Tabs!
 nano ~/kiosk/switch-tab.sh
 
@@ -55,11 +58,13 @@ done
 
 chmod u+x ~/kiosk/switch-tab.sh
 
+>>>
 4. Profile
 nano ~/.profile
 
 [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && startx -- -nocursor
 
+>>>
 5. AutoLogin
 sudo nano /etc/systemd/logind.conf
 
