@@ -27,9 +27,27 @@ setxkbmap -option terminate:ctrl_alt_bksp
 sed -i 's/"exited_cleanly":false/"exited_cleanly":true/' ~/.config/chromium/'Local State'
 sed -i 's/"exited_cleanly":false/"exited_cleanly" :true/; s/"exit_type":"[^"]\+"/"exit_type":"Normal"/' ~/.config/chromium/Default/Preferences
 
-chromium --start-fullscreen --kiosk --incognito --noerrdialogs --disable-translate --no-first-run --fast --fast-start --disable-infobars \
---disable-features=TranslateUI --disk-cache-dir=/dev/null  --password-store=basic --disable-pinch --overscroll-history-navigation=disabled \
---disable-features=TouchpadOverscrollHistoryNavigation $setwebsites && killall openbox
+bash /home/administrador/switch-tab.sh
+
+chromium \
+--start-fullscreen \
+--kiosk --incognito \
+--noerrdialogs \
+--disable-translate \
+--no-first-run \
+--fast \
+--fast-start \
+--disable-infobars \
+--disable-features=TranslateUI \
+--disk-cache-dir=/dev/null \
+--password-store=basic \
+--disable-pinch \
+--overscroll-history-navigation=disabled \
+--disable-features=TouchpadOverscrollHistoryNavigation \
+$setwebsites \
+&& \
+killall switch-tab.sh && \
+killall openbox
 
 3. Alternating Tabs!
 nano ~/switch-tab.sh
