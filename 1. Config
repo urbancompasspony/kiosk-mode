@@ -44,8 +44,7 @@ chromium \
 --disable-pinch \
 --overscroll-history-navigation=disabled \
 --disable-features=TouchpadOverscrollHistoryNavigation \
-$setwebsites \
-&& \
+$setwebsites && \
 killall switch-tab.sh && \
 killall openbox
 
