@@ -46,18 +46,18 @@ Nunca habilite ZoomIn e ZoomOut ao mesmo tempo; deixe um campo em 0!\n " 20 75 0
     echo "$var1" | tee /home/administrador/kiosk/Information > /home/administrador/kiosk/websites
     echo "$var2" | tee -a /home/administrador/kiosk/Information > /home/administrador/kiosk/duration
 
-    [ "$var3" = "0" ] || {
-      echo "$var3" | tee /home/administrador/kiosk/zoomin
-    } && {
+    [ "$var3" = "0" ] && {
       rm /home/administrador/kiosk/zoomin
+    } || {
+      echo "$var3" | tee /home/administrador/kiosk/zoomin
     }
 
     echo "$var3" | tee -a /home/administrador/kiosk/Information
 
-    [ "$var4" = "0" ] || {
-      echo "$var4" | tee /home/administrador/kiosk/zoomout
-    } && {
+    [ "$var4" = "0" ] && {
       rm /home/administrador/kiosk/zoomout
+    } || {
+      echo "$var4" | tee /home/administrador/kiosk/zoomout
     }
 
     echo "$var4" | tee -a /home/administrador/kiosk/Information
