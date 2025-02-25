@@ -70,6 +70,7 @@ function normal_run {
   [ "$value0" = 300 ] && { numero=7; }
   for ((i=1; i<=numero; i++))
   do
+    sleep 0.25
     /usr/bin/xdotool key Ctrl+plus 
   done
   normal_run
@@ -88,6 +89,7 @@ function normal_run {
   [ "$value1" = 25 ] && { numero=7; }
   for ((i=1; i<=numero; i++))
   do
+    sleep 0.25
     /usr/bin/xdotool key Ctrl+minus
   done
   normal_run
