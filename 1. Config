@@ -46,7 +46,7 @@ chromium \
 
 >>> >>> >>>
 3. Alternating Tabs!
-nano /home/administrador/.switch-tab.sh
+nano /home/administrador/kiosk/.switch-tab.sh
 
 #!/bin/bash
 export DISPLAY=:0.0; export XAUTHORITY=/home/administrador/.Xauthority
