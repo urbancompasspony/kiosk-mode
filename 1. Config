@@ -46,7 +46,7 @@ chromium \
 
 >>> >>> >>>
 3. Alternating Tabs!
-nano ~/kiosk/switch-tab.sh
+nano ~/kiosk/.switch-tab.sh
 
 #!/bin/bash
 export DISPLAY=:0.0
@@ -61,13 +61,13 @@ function normal_run {
 
 [ -f ~/kiosk/zoomin ] && {
   value0=$(cat ~/kiosk/zoomin)
-  [ "value0" = 110 ] && { numero=1; }
-  [ "value0" = 125 ] && { numero=2; }
-  [ "value0" = 150 ] && { numero=3; }
-  [ "value0" = 175 ] && { numero=4; }
-  [ "value0" = 200 ] && { numero=5; }
-  [ "value0" = 250 ] && { numero=6; }
-  [ "value0" = 300 ] && { numero=7; }
+  [ "$value0" = 110 ] && { numero=1; }
+  [ "$value0" = 125 ] && { numero=2; }
+  [ "$value0" = 150 ] && { numero=3; }
+  [ "$value0" = 175 ] && { numero=4; }
+  [ "$value0" = 200 ] && { numero=5; }
+  [ "$value0" = 250 ] && { numero=6; }
+  [ "$value0" = 300 ] && { numero=7; }
 while true; do
   for ((i=1; i<=numero; i++))
   do
@@ -81,13 +81,13 @@ done
 
 [ -f ~/kiosk/zoomout ] && {
   value1=$(cat ~/kiosk/zoomout)
-  [ "value1" = 90 ] && { numero=1; }
-  [ "value1" = 80 ] && { numero=2; }
-  [ "value1" = 75 ] && { numero=3; }
-  [ "value1" = 67 ] && { numero=4; }
-  [ "value1" = 50 ] && { numero=5; }
-  [ "value1" = 33 ] && { numero=6; }
-  [ "value1" = 25 ] && { numero=7; }
+  [ "$value1" = 90 ] && { numero=1; }
+  [ "$value1" = 80 ] && { numero=2; }
+  [ "$value1" = 75 ] && { numero=3; }
+  [ "$value1" = 67 ] && { numero=4; }
+  [ "$value1" = 50 ] && { numero=5; }
+  [ "$value1" = 33 ] && { numero=6; }
+  [ "$value1" = 25 ] && { numero=7; }
   while true; do
     for ((i=1; i<=numero; i++))
     do
