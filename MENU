@@ -56,13 +56,7 @@ function checkB {
 
     echo "$var5" | tee -a /home/administrador/kiosk/Information >> /home/administrador/kiosk/waittime
 
-    sudo killall chromium; sleep 3
-    sudo kill -9 $(cat /home/administrador/kiosk/pid_tab); sleep 1
-    killall openbox
-
-    export DISPLAY=:0.0; export XAUTHORITY=/home/administrador/.Xauthority
-    /etc/xdg/openbox/autostart
-    #startx
+    sudo reboot
     }
 }
 
