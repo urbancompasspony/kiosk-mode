@@ -48,20 +48,20 @@ Nunca habilite ZoomIn e ZoomOut ao mesmo tempo; deixe um campo em 0!\n " 20 75 0
 
     [ "$var3" = "0" ] && {
       rm /home/administrador/kiosk/zoomin
+      echo .>/dev/null
     } || {
       echo "$var3" | tee /home/administrador/kiosk/zoomin
     }
 
-    echo "$var3" | tee -a /home/administrador/kiosk/Information
-
     [ "$var4" = "0" ] && {
       rm /home/administrador/kiosk/zoomout
+      echo .>/dev/null
     } || {
       echo "$var4" | tee /home/administrador/kiosk/zoomout
     }
 
+    echo "$var3" | tee -a /home/administrador/kiosk/Information
     echo "$var4" | tee -a /home/administrador/kiosk/Information
-
     echo "$var5" | tee -a /home/administrador/kiosk/Information > /home/administrador/kiosk/waittime
 
     sudo reboot
