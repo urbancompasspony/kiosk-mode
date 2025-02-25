@@ -41,15 +41,18 @@ function checkB {
     checkB
   } || {
     echo "$var1" | tee /home/administrador/kiosk/Information > /home/administrador/kiosk/websites
-    echo "$var2" | tee -a /home/administrador/kiosk/Information >> /home/administrador/kiosk/duration
+    echo "$var2" | tee -a /home/administrador/kiosk/Information > /home/administrador/kiosk/duration
+    echo "$var3" | tee -a /home/administrador/kiosk/Information
+    echo "$var4" | tee -a /home/administrador/kiosk/Information
+    echo "$var5" | tee -a /home/administrador/kiosk/Information > /home/administrador/kiosk/waittime
 
     [ "$var3" = "0" ] || {
-      echo "$var3" | tee -a /home/administrador/kiosk/Information >> /home/administrador/kiosk/zoomin
-    } && { echo .>/dev/null; }
+      echo "$var3" > /home/administrador/kiosk/zoomin
+    } && { echo .>/dev/null; rm /home/administrador/kiosk/zoomin; }
 
     [ "$var4" = "0" ] || {
-      echo "$var4" | tee -a /home/administrador/kiosk/Information >> /home/administrador/kiosk/zoomout
-    } && { echo .>/dev/null; }
+      echo "$var4" > /home/administrador/kiosk/zoomout
+    } && { echo .>/dev/null; rm /home/administrador/kiosk/zoomout; }
 
     echo "$var5" | tee -a /home/administrador/kiosk/Information >> /home/administrador/kiosk/waittime
 
