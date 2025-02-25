@@ -1,4 +1,4 @@
->>>
+>>> >>> >>>
 1. Ubuntu Server LTS - Set Default Config with Linite
 
 sudo wget 'https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x869689FE09306074' \
@@ -7,10 +7,9 @@ sudo wget 'https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x869689FE09306
 echo "deb https://freeshell.de/phd/chromium/$(lsb_release -sc) /" \
   | sudo tee /etc/apt/sources.list.d/phd-chromium.list
 
-sudo apt update
-sudo apt install chromium xdotool
+sudo apt update; sudo apt install chromium xdotool
 
->>>
+>>> >>> >>>
 2. Preparing OpenBox
 sudo nano /etc/xdg/openbox/autostart
 
@@ -30,7 +29,8 @@ bash /home/administrador/kiosk/.switch-tab.sh & echo $! | tee ~/kiosk/pid_tab
 
 chromium \
 --start-fullscreen \
---kiosk --incognito \
+--kiosk \
+--incognito \
 --noerrdialogs \
 --disable-translate \
 --no-first-run \
@@ -44,27 +44,55 @@ chromium \
 --overscroll-history-navigation=disabled \
 --disable-features=TouchpadOverscrollHistoryNavigation $(cat ~/kiosk/websites) && kill -9 $(cat ~/kiosk/pid_tab) && killall openbox
 
->>>
+>>> >>> >>>
 3. Alternating Tabs!
 nano ~/kiosk/switch-tab.sh
 
 #!/bin/bash
 export DISPLAY=:0.0
 export XAUTHORITY=/home/administrador/.Xauthority
-while true; do
-  sleep $(cat ~/kiosk/duration)
-  /usr/bin/xdotool key Ctrl+Tab
-done
+[ -f ~/kiosk/zoomin ] && {
+  while true; do
+    sleep $(cat ~/kiosk/duration)
+    /usr/bin/xdotool key Ctrl+Tab
+    numero=$(cat ~/kiosk/zoomin)
+    for ((i=1; i<=numero; i++))
+    do
+      /usr/bin/xdotool key Ctrl+plus 
+    done
+  done
+} || {
+  while true; do
+    sleep $(cat ~/kiosk/duration)
+    /usr/bin/xdotool key Ctrl+Tab
+  done
+}
+[ -f ~/kiosk/zoomout ] && {
+  while true; do
+    sleep $(cat ~/kiosk/duration)
+    /usr/bin/xdotool key Ctrl+Tab
+    numero=$(cat ~/kiosk/zoomout)
+    for ((i=1; i<=numero; i++))
+    do
+      /usr/bin/xdotool key Ctrl+minus
+    done
+  done
+} || {
+  while true; do
+    sleep $(cat ~/kiosk/duration)
+    /usr/bin/xdotool key Ctrl+Tab
+  done
+}
 
 chmod u+x ~/kiosk/switch-tab.sh
 
->>>
+>>> >>> >>>
 4. Profile
 nano ~/.profile
 
 [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && startx -- -nocursor
 
->>>
+>>> >>> >>>
 5. AutoLogin
 sudo nano /etc/systemd/logind.conf
 
