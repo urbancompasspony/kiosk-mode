@@ -1,1 +1,60 @@
+#!/bin/bash
 
+export var1; export var2; export var3; export var4; export var5; export var6; export var7; export var8
+
+function checkA {
+  [ "$EUID" -ne 0 ] && {
+    echo "Execute esse script como Root!"
+    exit
+    }
+}
+
+function check0 {
+  export var1; export var2; export var3; export var4; export var5; export var6; export var7; export var8
+
+  [ -f "/srv/kiosk/Information" ] && {
+    VALUE1=$(sed -n '1p' /srv/kiosk/Information)
+    VALUE2=$(sed -n '2p' /srv/kiosk/Information)
+    VALUE3=$(sed -n '3p' /srv/kiosk/Information)
+    VALUE4=$(sed -n '4p' /srv/kiosk/Information)
+    VALUE5=$(sed -n '5p' /srv/kiosk/Information)
+    VALUE6=$(sed -n '6p' /srv/kiosk/Information)
+    VALUE7=$(sed -n '7p' /srv/kiosk/Information)
+    VALUE8=$(sed -n '8p' /srv/kiosk/Information)
+  } || {
+    VALUE1=" "; VALUE2=" "; VALUE3=" "; VALUE4=" "; VALUE5=" "; VALUE6=" "; VALUE7=" "; VALUE8=" "
+  }
+
+  VALUE0=$(dialog --ok-label "Ajustar" --title "KIOSK" --form " " 15 50 0 \
+"F.Q.D.N.: " 1 1 "$VALUE1" 1 10 34 0 \
+"Local IP:" 2 1 "$VALUE2" 2 10 34 0 \
+"ADM Pass:" 3 1 "$VALUE3" 3 10 34 0 \
+"LAN DNS :" 4 1 "$VALUE4" 4 10 34 0 \
+"Hostname:" 5 1 "$VALUE5" 5 10 34 0 \
+"NetLAN  :" 6 1 "$VALUE6" 6 10 34 0 \
+"MNT Path:" 7 1 "$VALUE7" 7 10 50 0 \
+"CUPSPass:" 8 1 "$VALUE8" 8 10 50 0 \
+3>&1 1>&2 2>&3 3>&- > /dev/tty)
+
+  [ $? -ne 0 ] && exit
+
+  var1=$(echo "$VALUE0" | sed -n 1p)
+  var2=$(echo "$VALUE0" | sed -n 2p)
+  var3=$(echo "$VALUE0" | sed -n 3p)
+  var4=$(echo "$VALUE0" | sed -n 4p)
+  var5=$(echo "$VALUE0" | sed -n 5p)
+  var6=$(echo "$VALUE0" | sed -n 6p)
+  var7=$(echo "$VALUE0" | sed -n 7p)
+  var8=$(echo "$VALUE0" | sed -n 8p)
+
+  [ -z "$var1" ] || [ -z "$var2" ] || [ -z "$var3" ] || [ -z "$var4" ] || [ -z "$var5" ] || [ -z "$var6" ] || [ -z "$var7" ] || [ -z "$var8" ] && {
+    dialog --title "ERRO" --msgbox "Não deixe nenhum campo vazio!" 8 40
+    menu
+  } || {
+    checkC
+    }
+}
+
+check0
+
+exit 1
