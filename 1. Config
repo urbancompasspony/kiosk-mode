@@ -13,9 +13,6 @@ sudo apt update; sudo apt install chromium xdotool
 2. Preparing OpenBox
 sudo nano /etc/xdg/openbox/autostart
 
-# (PT0) Wait Boot!
-sleep $(cat ~/kiosk/waittime)
-
 # (PT1) Disable any form of screen saver / screen blanking / power management
 xset s off
 xset s noblank
@@ -60,6 +57,8 @@ function normal_run {
     /usr/bin/xdotool key Ctrl+Tab
   done
 }
+
+sleep $(cat ~/kiosk/waittime)
 
 [ -f ~/kiosk/zoomin ] && {
   export DISPLAY=:0.0; export XAUTHORITY=/home/administrador/.Xauthority
