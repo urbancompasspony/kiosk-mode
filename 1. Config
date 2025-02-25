@@ -51,38 +51,56 @@ nano ~/kiosk/switch-tab.sh
 #!/bin/bash
 export DISPLAY=:0.0
 export XAUTHORITY=/home/administrador/.Xauthority
-[ -f ~/kiosk/zoomin ] && {
-  while true; do
-    sleep $(cat ~/kiosk/duration)
-    /usr/bin/xdotool key Ctrl+Tab
-    numero=$(cat ~/kiosk/zoomin)
-    for ((i=1; i<=numero; i++))
-    do
-      /usr/bin/xdotool key Ctrl+plus 
-    done
-  done
-} || {
+
+function normal_run {
   while true; do
     sleep $(cat ~/kiosk/duration)
     /usr/bin/xdotool key Ctrl+Tab
   done
 }
+
+[ -f ~/kiosk/zoomin ] && {
+  value0=$(cat ~/kiosk/zoomin)
+  [ "value0" = 110 ] && { numero=1; }
+  [ "value0" = 125 ] && { numero=2; }
+  [ "value0" = 150 ] && { numero=3; }
+  [ "value0" = 175 ] && { numero=4; }
+  [ "value0" = 200 ] && { numero=5; }
+  [ "value0" = 250 ] && { numero=6; }
+  [ "value0" = 300 ] && { numero=7; }
+while true; do
+  for ((i=1; i<=numero; i++))
+  do
+    /usr/bin/xdotool key Ctrl+plus 
+  done
+done
+  normal_run
+} || {
+  echo .>/dev/null
+}
+
 [ -f ~/kiosk/zoomout ] && {
+  value1=$(cat ~/kiosk/zoomout)
+  [ "value1" = 90 ] && { numero=1; }
+  [ "value1" = 80 ] && { numero=2; }
+  [ "value1" = 75 ] && { numero=3; }
+  [ "value1" = 67 ] && { numero=4; }
+  [ "value1" = 50 ] && { numero=5; }
+  [ "value1" = 33 ] && { numero=6; }
+  [ "value1" = 25 ] && { numero=7; }
   while true; do
-    sleep $(cat ~/kiosk/duration)
-    /usr/bin/xdotool key Ctrl+Tab
-    numero=$(cat ~/kiosk/zoomout)
     for ((i=1; i<=numero; i++))
     do
       /usr/bin/xdotool key Ctrl+minus
     done
   done
+    normal_run
 } || {
-  while true; do
-    sleep $(cat ~/kiosk/duration)
-    /usr/bin/xdotool key Ctrl+Tab
-  done
+  echo .>/dev/null
 }
+
+normal_run
+exit 1
 
 chmod u+x ~/kiosk/switch-tab.sh
 
@@ -100,8 +118,7 @@ sudo nano /etc/systemd/logind.conf
 NAutoVTs=6
 ReserveVT=7
 
-sudo mkdir /etc/systemd/system/getty@tty1.service.d/
-sudo nano /etc/systemd/system/getty@tty1.service.d/override.conf
+sudo mkdir /etc/systemd/system/getty@tty1.service.d/; sudo nano /etc/systemd/system/getty@tty1.service.d/override.conf
 
 [Service]
 ExecStart=
