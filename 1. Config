@@ -68,12 +68,10 @@ function normal_run {
   [ "$value0" = 200 ] && { numero=5; }
   [ "$value0" = 250 ] && { numero=6; }
   [ "$value0" = 300 ] && { numero=7; }
-while true; do
   for ((i=1; i<=numero; i++))
   do
     /usr/bin/xdotool key Ctrl+plus 
   done
-done
   normal_run
 } || {
   echo .>/dev/null
@@ -88,13 +86,11 @@ done
   [ "$value1" = 50 ] && { numero=5; }
   [ "$value1" = 33 ] && { numero=6; }
   [ "$value1" = 25 ] && { numero=7; }
-  while true; do
-    for ((i=1; i<=numero; i++))
-    do
-      /usr/bin/xdotool key Ctrl+minus
-    done
+  for ((i=1; i<=numero; i++))
+  do
+    /usr/bin/xdotool key Ctrl+minus
   done
-    normal_run
+  normal_run
 } || {
   echo .>/dev/null
 }
