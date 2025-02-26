@@ -7,12 +7,7 @@ sudo wget 'https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x869689FE09306
 echo "deb https://freeshell.de/phd/chromium/$(lsb_release -sc) /" \
   | sudo tee /etc/apt/sources.list.d/phd-chromium.list
 
-x86:
-sudo apt update; sudo apt install chromium xdotool
-
-AMR64:
-sudo apt update
-sudo apt install chromium-bsu xdotool xinit xorg openbox
+sudo apt update; sudo apt install chromium xdotool xinit xorg openbox
 
 >>> >>> >>>
 2. Preparing OpenBox
@@ -33,9 +28,6 @@ sed -i -e 's/"translate":{"enabled":true}/"translate":{"enabled":false}/' ~/.con
 
 bash /home/administrador/kiosk/.switch-tab.sh & echo $! | tee /home/administrador/kiosk/pid_tab
 
-# ARM64:
-# chromium-bsu
-# x86:
 chromium \
 --start-fullscreen \
 --kiosk \
