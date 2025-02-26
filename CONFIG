@@ -11,8 +11,7 @@ x86:
 sudo apt update; sudo apt install chromium xdotool
 AMR64:
 sudo apt update
-sudo apt install chromium-bsu xdotool
-sudo apt install xinit xorg openbox --no-install-recommends
+sudo apt install chromium-bsu xdotool xinit xorg openbox xterm
 
 >>> >>> >>>
 2. Preparing OpenBox
