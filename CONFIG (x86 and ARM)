@@ -7,7 +7,7 @@ sudo wget 'https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x869689FE09306
 echo "deb https://freeshell.de/phd/chromium/$(lsb_release -sc) /" \
   | sudo tee /etc/apt/sources.list.d/phd-chromium.list
 
-sudo apt update; sudo apt install chromium xdotool xinit xorg openbox
+sudo apt update; sudo apt install chromium
 
 >>> >>> >>>
 2. Preparing OpenBox
