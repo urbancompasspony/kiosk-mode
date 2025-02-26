@@ -10,7 +10,9 @@ echo "deb https://freeshell.de/phd/chromium/$(lsb_release -sc) /" \
 x86:
 sudo apt update; sudo apt install chromium xdotool
 AMR64:
-sudo apt update; sudo apt install chromium-bsu xdotool
+sudo apt update
+sudo apt install chromium-bsu xdotool
+sudo apt install xinit xorg openbox --no-install-recommends
 
 >>> >>> >>>
 2. Preparing OpenBox
