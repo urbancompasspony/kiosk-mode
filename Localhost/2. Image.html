@@ -24,39 +24,25 @@
 <body>
     <img id="slideshow" src="" alt="Slideshow">
     <script>
-        const imageExtensions = ['png', 'jpg', 'jpeg'];
-        const images = [];
-        
-        const loadImages = () => {
-            fetch('./path-to-your-image-directory')
-                .then(response => response.text())
-                .then(text => {
-                    const parser = new DOMParser();
-                    const htmlDocument = parser.parseFromString(text, 'text/html');
-                    const imgTags = htmlDocument.getElementsByTagName('img');
-                    for (let img of imgTags) {
-                        const src = img.getAttribute('src');
-                        const ext = src.split('.').pop().toLowerCase();
-                        if (imageExtensions.includes(ext)) {
-                            images.push(src);
-                        }
-                    }
-                })
-                .catch(error => console.error('Error loading images:', error));
-        };
+        const images = [
+            'imagem1.jpg', 
+            'imagem2.jpeg', 
+            'imagem3.png', 
+            'imagem4.jpg'
+            // Adicione o nome das imagens aqui
+        ];
 
         let currentIndex = 0;
         const imageElement = document.getElementById('slideshow');
         const interval = 3000; // Intervalo de 3 segundos
 
         function changeImage() {
-            if (images.length > 0) {
-                currentIndex = (currentIndex + 1) % images.length;
-                imageElement.src = images[currentIndex];
-            }
+            currentIndex = (currentIndex + 1) % images.length;
+            imageElement.src = images[currentIndex];
         }
 
-        loadImages();
+        // Inicia o slideshow com a primeira imagem
+        imageElement.src = images[0];
         setInterval(changeImage, interval);
     </script>
 </body>
