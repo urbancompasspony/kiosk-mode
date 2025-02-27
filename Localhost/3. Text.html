@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Texto Rolando Automático</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: white;
+        }
+        #text-container {
+            width: 80%;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+        #text-content {
+            position: absolute;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div id="text-container">
+        <div id="text-content"></div>
+    </div>
+    <script>
+        async function loadText() {
+            const response = await fetch('texto.txt');
+            const text = await response.text();
+            const textContent = document.getElementById('text-content');
+            textContent.textContent = text;
+            scrollText();
+        }
+
+        function scrollText() {
+            const textContainer = document.getElementById('text-container');
+            const textContent = document.getElementById('text-content');
+            let start = textContainer.clientHeight;
+            let end = -textContent.clientHeight;
+
+            function step() {
+                start -= 1;
+                if (start <= end) {
+                    start = textContainer.clientHeight;
+                }
+                textContent.style.top = start + 'px';
+                requestAnimationFrame(step);
+            }
+
+            step();
+        }
+
+        loadText();
+    </script>
+</body>
+</html>
