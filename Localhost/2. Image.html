@@ -26,23 +26,34 @@
     <script>
         const imageExtensions = ['png', 'jpg', 'jpeg'];
         const images = [];
-
-        // Aqui, você precisará listar manualmente as imagens ou carregar automaticamente de um servidor.
+        
         const loadImages = () => {
-            for (let i = 1; i <= 4; i++) {
-                imageExtensions.forEach(ext => {
-                    images.push(`imagem${i}.${ext}`);
-                });
-            }
-        }
+            fetch('./path-to-your-image-directory')
+                .then(response => response.text())
+                .then(text => {
+                    const parser = new DOMParser();
+                    const htmlDocument = parser.parseFromString(text, 'text/html');
+                    const imgTags = htmlDocument.getElementsByTagName('img');
+                    for (let img of imgTags) {
+                        const src = img.getAttribute('src');
+                        const ext = src.split('.').pop().toLowerCase();
+                        if (imageExtensions.includes(ext)) {
+                            images.push(src);
+                        }
+                    }
+                })
+                .catch(error => console.error('Error loading images:', error));
+        };
 
         let currentIndex = 0;
         const imageElement = document.getElementById('slideshow');
         const interval = 3000; // Intervalo de 3 segundos
 
         function changeImage() {
-            currentIndex = (currentIndex + 1) % images.length;
-            imageElement.src = images[currentIndex];
+            if (images.length > 0) {
+                currentIndex = (currentIndex + 1) % images.length;
+                imageElement.src = images[currentIndex];
+            }
         }
 
         loadImages();
