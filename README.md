@@ -1,2 +1,3 @@
 # kiosk-mode
-Kiosk Mode with Linux!
+
+Kiosk Mode for x86 and ARM
