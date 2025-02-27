@@ -42,7 +42,6 @@ chromium \
 --disk-cache-dir=/dev/null \
 --password-store=basic \
 --disable-pinch \
---disable-features="Translate" \
 --overscroll-history-navigation=disabled \
 --disable-features=TouchpadOverscrollHistoryNavigation $(cat /home/administrador/kiosk/websites) && kill -9 $(cat /home/administrador/kiosk/pid_tab) && killall openbox
 
