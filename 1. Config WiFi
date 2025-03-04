@@ -1,9 +1,7 @@
-sudo apt update
-sudo apt upgrade
-
 sudo apt install hostapd dnsmasq bridge-utils
 
 sudo nano /etc/dhcpcd.conf
+
 interface wlan0
 static ip_address=192.168.0.10/24
 denyinterfaces eth0
