@@ -1,7 +1,7 @@
 >>> >>> >>> >>> >>> >>> >>> >>> >>>
 1. Install ungoogled-chromium
 sudo add-apt-repository ppa:xtradeb/apps -y
-sudo apt update && sudo apt install ungoogled-chromium
+sudo apt update && sudo apt install ungoogled-chromium chromium-codecs-ffmpeg-extra
 
 >>> >>> >>> >>> >>> >>> >>> >>> >>>
 2. Preparing OpenBox
