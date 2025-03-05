@@ -22,11 +22,6 @@ sudo nano /etc/hosts
 127.0.0.1 HOSTNAME
 
 sudo nano /etc/sysctl.conf
-
-kernel.sysrq=1
-vm.panic_on_oom=1
-kernel.panic=5
-vm.swaapiness=10
 net.ipv4.ip_forward=1
 
 #Disable IP6 entirely
@@ -69,7 +64,6 @@ $ netstat -atun
 
 ### PiHole
 
-sudo usermod -aG docker administrador
 sudo mkdir -p /srv/containers/pihole/{etc,dnsmasq.d}
 
 To RUN:
