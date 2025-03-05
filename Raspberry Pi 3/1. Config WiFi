@@ -8,7 +8,11 @@ sudo nano /etc/resolv.conf creating a new file and put this inside:
 nameserver 127.0.0.1
 search HOSTNAME
 
-# Original resolv.conf (if needed on emergency):
+If needed on emergency change on /etc/resolv.conf:
+nameserver 1.0.0.1
+search raspberrypi
+
+# Original resolv.conf 
 nameserver 127.0.0.53
 options edns0 trust-ad
 search localdomain
