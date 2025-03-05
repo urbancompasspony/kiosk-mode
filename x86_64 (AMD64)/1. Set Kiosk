@@ -3,6 +3,11 @@
 sudo add-apt-repository ppa:xtradeb/apps -y
 sudo apt update && sudo apt install ungoogled-chromium chromium-codecs-ffmpeg-extra -y
 
+mkdir ~/.local/share/keyrings
+start
+rm ~/.local/share/keyrings/*
+reboot
+
 >>> >>> >>> >>> >>> >>> >>> >>> >>>
 2. Preparing OpenBox
 sudo nano /etc/xdg/openbox/autostart
