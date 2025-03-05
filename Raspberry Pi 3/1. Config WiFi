@@ -1,6 +1,6 @@
 ### For Ubuntu Server
 
-sudo apt install network-manager && sudo apt purge dnsmasq-base && sudo killall dnsmasq
+sudo apt install network-manager && sudo apt purge dnsmasq-base
 
 sudo systemctl stop systemd-resolved && sudo systemctl disable systemd-resolved && sudo systemctl mask systemd-resolved && sudo unlink /etc/resolv.conf
 
