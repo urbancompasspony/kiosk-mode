@@ -3,7 +3,7 @@ sudo apt install hostapd dnsmasq bridge-utils
 sudo nano /etc/dhcpcd.conf
 
 interface wlan0
-static ip_address=192.168.0.10/24
+static ip_address=192.168.4.10/24
 denyinterfaces eth0
 denyinterfaces wlan0
 
@@ -11,7 +11,7 @@ sudo mv /etc/dnsmasq.conf /etc/dnsmasq.conf.orig
 sudo nano /etc/dnsmasq.conf
 
 interface=wlan0
-  dhcp-range=192.168.0.11,192.168.0.30,255.255.255.0,24h
+  dhcp-range=192.168.4.11,192.168.4.30,255.255.255.0,24h
   
 sudo nano /etc/hostapd/hostapd.conf
 
