@@ -1,0 +1,119 @@
+>>> >>> >>> >>> >>> >>> >>> >>> >>>
+1. Install ungoogled-chromium
+sudo add-apt-repository ppa:xtradeb/apps -y
+sudo apt update && sudo apt install ungoogled-chromium
+
+>>> >>> >>> >>> >>> >>> >>> >>> >>>
+2. Preparing OpenBox
+sudo nano /etc/xdg/openbox/autostart
+
+xset s off
+xset s noblank
+xset -dpms
+
+setxkbmap -option terminate:ctrl_alt_bksp
+
+sed -i 's/"exited_cleanly":false/"exited_cleanly":true/' ~/.config/chromium/'Local State'
+sed -i 's/"exited_cleanly":false/"exited_cleanly" :true/; s/"exit_type":"[^"]\+"/"exit_type":"Normal"/' ~/.config/chromium/Default/Preferences
+sed -i -e 's/"translate":{"enabled":true}/"translate":{"enabled":false}/' ~/.config/chromium/Default/Preferences
+
+bash /home/administrador/kiosk/.switch-tab.sh & echo $! | tee /home/administrador/kiosk/pid_tab
+
+ungoogled-chromium \
+--start-fullscreen \
+--kiosk \
+--incognito \
+--noerrdialogs \
+--disable-translate \
+--no-first-run \
+--fast \
+--fast-start \
+--disable-infobars \
+--disable-features=TranslateUI \
+--disk-cache-dir=/dev/null \
+--password-store=basic \
+--disable-pinch \
+--overscroll-history-navigation=disabled \
+--disable-features=TouchpadOverscrollHistoryNavigation $(cat /home/administrador/kiosk/websites) && kill -9 $(cat /home/administrador/kiosk/pid_tab) && killall openbox
+
+>>> >>> >>> >>> >>> >>> >>> >>> >>>
+3. Alternating Tabs!
+mkdir /home/administrador/kiosk; nano /home/administrador/kiosk/.switch-tab.sh
+
+#!/bin/bash
+export DISPLAY=:0.0; export XAUTHORITY=/home/administrador/.Xauthority
+
+function normal_run {
+  while true; do
+    sleep $(cat /home/administrador/kiosk/duration)
+    /usr/bin/xdotool key Ctrl+Tab
+  done
+}
+
+sleep $(cat /home/administrador/kiosk/waittime)
+
+[ -f /home/administrador/kiosk/zoomin ] && {
+  value0=$(cat /home/administrador/kiosk/zoomin)
+  [ "$value0" = 110 ] && { numero="1"; }
+  [ "$value0" = 125 ] && { numero="2"; }
+  [ "$value0" = 150 ] && { numero="3"; }
+  [ "$value0" = 175 ] && { numero="4"; }
+  [ "$value0" = 200 ] && { numero="5"; }
+  [ "$value0" = 250 ] && { numero="6"; }
+  [ "$value0" = 300 ] && { numero="7"; }
+  for ((i=1; i<=numero; i++)); do
+    sleep 0.25
+    /usr/bin/xdotool key Ctrl+plus
+  done
+  normal_run
+} || {
+  echo .>/dev/null
+}
+
+[ -f /home/administrador/kiosk/zoomout ] && {
+  value1=$(cat /home/administrador/kiosk/zoomout)
+  [ "$value1" = 90 ] && { numero="1"; }
+  [ "$value1" = 80 ] && { numero="2"; }
+  [ "$value1" = 75 ] && { numero="3"; }
+  [ "$value1" = 67 ] && { numero="4"; }
+  [ "$value1" = 50 ] && { numero="5"; }
+  [ "$value1" = 33 ] && { numero="6"; }
+  [ "$value1" = 25 ] && { numero="7"; }
+  for ((i=1; i<=numero; i++)); do
+    sleep 0.25
+    /usr/bin/xdotool key Ctrl+minus
+  done
+  normal_run
+} || {
+  echo .>/dev/null
+}
+
+normal_run
+exit 1
+
+chmod u+x /home/administrador/kiosk/.switch-tab.sh
+
+>>> >>> >>> >>> >>> >>> >>> >>> >>>
+4. Profile
+nano /home/administrador/.profile
+
+[[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && startx -- -nocursor
+
+>>> >>> >>> >>> >>> >>> >>> >>> >>>
+5. AutoLogin
+sudo nano /etc/systemd/logind.conf
+
+[Login]
+NAutoVTs=6
+ReserveVT=7
+
+sudo mkdir /etc/systemd/system/getty@tty1.service.d/; sudo nano /etc/systemd/system/getty@tty1.service.d/override.conf
+
+[Service]
+ExecStart=
+ExecStart=-/sbin/agetty --noissue --autologin administrador %I $TERM
+Type=idle
+
+Reboot.
+
+To close: CTRL ALT BACKSPACE
