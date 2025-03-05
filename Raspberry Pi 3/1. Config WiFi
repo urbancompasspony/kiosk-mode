@@ -99,20 +99,6 @@ Pool: 192.168.4.10 to 192.168.4.200
 
 sudo reboot
 
-# To multiple Interfaces under PiHole:
-Create /etc/dnsmasq.d/99-interfaces.conf and add:
-interface=eth1
-
-On Netplan:
-    eth1:
-      dhcp4: true
-      dhcp6: false
-      addresses:
-      - 192.168.4.1/24
-      optional: true
-
-Re-do container/pihole config!
-
 sudo nano /etc/systemd/system/multi-user.target.wants/NetworkManager.service
 
 add
