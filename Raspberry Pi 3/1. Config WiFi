@@ -99,7 +99,22 @@ TURN ON DHCP ON PIHOLE because NetPlan doesn't have it!!
 Set IP and Gateway: 192.168.4.1
 Pool: 192.168.4.10 to 192.168.4.200
 
-sudo reboot
+sudo mkdir -p /srv/containers/filebrowser/{config,database}
+sudo wget https://raw.githubusercontent.com/filebrowser/filebrowser/master/docker/root/defaults/settings.json -O /srv/containers/filebrowser/config/.filebrowser.json
+
+docker run -d \
+--name=filebrowser \
+--network host \
+--hostname=filebrowser \
+--no-healthcheck \
+--restart=unless-stopped \
+-u $(id -u):$(id -g) \
+-p 8081:8081 \
+-v /etc/localtime:/etc/localtime:ro \
+-v /var/www:/srv \
+-v /srv/containers/filebrowser/config/.filebrowser.json:/.filebrowser.json \
+-v /srv/containers/filebrowser/database:/database \
+filebrowser/filebrowser:latest
 
 sudo nano /etc/systemd/system/multi-user.target.wants/NetworkManager.service
 
@@ -107,4 +122,4 @@ add
 ExecStartPre=/bin/sleep 15
 to [SERVICE]
 
-
+sudo reboot
