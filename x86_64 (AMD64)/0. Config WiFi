@@ -1,0 +1,127 @@
+### For Ubuntu Server 22.04 LTS
+
+sudo apt install network-manager && sudo apt purge dnsmasq-base
+
+sudo systemctl stop systemd-resolved && sudo systemctl disable systemd-resolved && sudo systemctl mask systemd-resolved && sudo unlink /etc/resolv.conf
+
+sudo nano /etc/resolv.conf creating a new file and put this inside:
+nameserver 127.0.0.1
+search HOSTNAME
+
+If needed on emergency change on /etc/resolv.conf:
+nameserver 1.0.0.1
+search raspberrypi
+
+# Original resolv.conf 
+nameserver 127.0.0.53
+options edns0 trust-ad
+search localdomain
+
+sudo nano /etc/hosts
+127.0.0.1 localhost
+127.0.0.1 HOSTNAME
+
+sudo nano /etc/sysctl.conf
+
+kernel.sysrq=1
+vm.panic_on_oom=1
+kernel.panic=5
+vm.swaapiness=10
+net.ipv4.ip_forward=1
+
+#Disable IP6 entirely
+net.ipv6.conf.all.disable_ipv6=1
+net.ipv6.conf.default.disable_ipv6=1
+net.ipv6.conf.eth0.disable_ipv6=1
+
+sudo nano /etc/netplan TAB:
+
+network:
+  renderer: NetworkManager
+  ethernets:
+    eth0:
+      dhcp4: true
+      dhcp6: false
+      optional: true
+      nameservers:
+        addresses: [8.8.4.4, 1.0.0.1]
+  wifis:
+    wlan0:
+      dhcp4: true
+      dhcp6: false
+      addresses:
+      - 192.168.4.1/24
+      optional: true
+      access-points:
+        "rpi-kiosk":
+          password: "******"
+          mode: ap
+  version: 2
+
+sudo iptables -F && sudo iptables -X && sudo iptables -A OUTPUT -j ACCEPT -m comment --comment "Accept all outgoing"
+sudo iptables -A INPUT -j ACCEPT -m comment --comment "Accept all incoming" && sudo iptables -A FORWARD -j ACCEPT -m comment --comment "Accept all forwarded"
+
+sudo netplan apply
+
+### Check if there is any process on 53 port:
+$ sudo lsof -i -P -n | grep 53
+$ netstat -atun
+
+### PiHole
+
+sudo usermod -aG docker administrador
+sudo mkdir -p /srv/containers/pihole/{etc,dnsmasq.d}
+
+To RUN:
+docker stop pihole && docker rm pihole
+
+docker run -d \
+--name=pihole \
+--network host \
+--dns 1.0.0.1 \
+--dns 8.8.4.4 \
+--hostname=pihole \
+--no-healthcheck \
+--restart=unless-stopped \
+--cap-add=NET_ADMIN \
+-e INTERFACE=wlan0 \
+-e FTLCONF_dns_listeningMode=all \
+-e FTLCONF_webserver_api_password="******" \
+-e TZ=America/Bahia \
+-v /etc/localtime:/etc/localtime:ro \
+-v /srv/containers/pihole/etc/:/etc/pihole \
+-v /srv/containers/pihole/dnsmasq.d/:/etc/dnsmasq.d \
+pihole/pihole:latest
+
+docker exec pihole pihole-FTL --config webserver.port 8443
+
+TURN ON DHCP ON PIHOLE because NetPlan doesn't have it!!
+Set IP and Gateway: 192.168.4.1
+Pool: 192.168.4.10 to 192.168.4.200
+
+sudo mkdir -p /srv/containers/filebrowser/{config,database}
+sudo chmod 777 -R /srv/containers/filebrowser/database && sudo chmod 777 -R /var/www/
+
+sudo wget https://raw.githubusercontent.com/urbancompasspony/kiosk-mode/refs/heads/main/1.%20Default%20Settings/settings.json -O /srv/containers/filebrowser/config/.filebrowser.json
+
+docker run -d \
+--name=filebrowser \
+--network host \
+--hostname=filebrowser \
+--no-healthcheck \
+--restart=unless-stopped \
+-u $(id -u):$(id -g) \
+-p 8081:8081 \
+-v /etc/localtime:/etc/localtime:ro \
+-v /var/www:/srv \
+-v /srv/containers/filebrowser/config/.filebrowser.json:/.filebrowser.json \
+-v /srv/containers/filebrowser/database:/database \
+filebrowser/filebrowser:latest
+
+sudo nano /etc/systemd/system/multi-user.target.wants/NetworkManager.service
+
+add
+ExecStartPre=/bin/sleep 15
+to [SERVICE]
+
+sudo reboot
