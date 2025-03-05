@@ -12,6 +12,13 @@ reboot
 2. Preparing OpenBox
 sudo nano /etc/xdg/openbox/autostart
 
+# TO ROTATE SCREEN ON HDMI:
+# Find display code on xrandr command. So:
+xrandr --output HDMI-1 --rotate normal
+xrandr --output HDMI-1 --rotate left
+xrandr --output HDMI-1 --rotate right
+xrandr --output HDMI-1 --rotate inverted
+
 xset s off
 xset s noblank
 xset -dpms
@@ -118,9 +125,6 @@ sudo mkdir /etc/systemd/system/getty@tty1.service.d/; sudo nano /etc/systemd/sys
 ExecStart=
 ExecStart=-/sbin/agetty --noissue --autologin administrador %I $TERM
 Type=idle
-
-TO ROTATE SCREEN ON HDMI:
-sudo nano 
 
 sudo nano /var/www/html/index.html
 
