@@ -1,12 +1,14 @@
 
 sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y
 
-sudo apt install docker.io net-tools speedtest-cli whois netdiscover iperf arp-scan traceroute sshpass \
+sudo apt purge needrestart cloud-init snapd unattended-upgrades plank deja-dup evolution evolution-data-server bluez blueman bluetooth -y
+
+sudo apt install docker.io net-tools speedtest-cli whois netdiscover iperf arp-scan traceroute sshpass network-manager \
 libatasmart-bin smartmontools zip unzip p7zip-full 7zip p7zip cifs-utils rsnapshot rclone iotop \
 haveged stress lm-sensors cmatrix btop inxi tree dialog btrfs-progs build-essential unrar \
-docker.io net-tools speedtest-cli whois netdiscover iperf arp-scan traceroute sshpass xinit xorg openbox xdotool
+openvpn curl nmap parallel rclone openssh-server samba samba-dsdb-modules samba-vfs-modules beep xinit xorg openbox xdotool linux-modules-extra-raspi
 
-sudo apt purge needrestart
+sudo systemctl disable systemd-networkd-wait-online.service && sudo systemctl mask systemd-networkd-wait-online.service && sudo systemctl disable NetworkManager-wait-online.service && sudo systemctl mask NetworkManager-wait-online.service
 
 sudo dd if=/dev/zero of=/swapfile bs=1k count=1000000
 sudo chmod 0600 /swapfile
