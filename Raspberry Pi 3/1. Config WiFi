@@ -1,62 +1,130 @@
-sudo apt install hostapd dnsmasq bridge-utils
+### For Ubuntu Server
 
-sudo nano /etc/dhcpcd.conf
+sudo apt install network-manager
+sudo apt purge dnsmasq-base
+sudo killall dnsmasq
 
-interface wlan0
-static ip_address=192.168.4.1/24
-denyinterfaces eth0
-denyinterfaces wlan0
+sudo systemctl stop systemd-resolved
+sudo systemctl disable systemd-resolved
+sudo systemctl mask systemd-resolved
+sudo unlink /etc/resolv.conf
 
-sudo mv /etc/dnsmasq.conf /etc/dnsmasq.conf.orig
-sudo nano /etc/dnsmasq.conf
+Then edit /etc/resolv.conf creating a new file and put this inside:
+nameserver 127.0.0.1
+search ubuntu
 
-interface=wlan0
-  dhcp-range=192.168.4.11,192.168.4.30,255.255.255.0,24h
-  
-sudo nano /etc/hostapd/hostapd.conf
+# Original resolv.conf (if needed on emergency):
+nameserver 127.0.0.53
+options edns0 trust-ad
+search localdomain
 
-interface=wlan0
-bridge=br0
-hw_mode=g
-channel=7
-wmm_enabled=0
-macaddr_acl=0
-auth_algs=1
-ignore_broadcast_ssid=0
-wpa=2
-wpa_key_mgmt=WPA-PSK
-wpa_pairwise=TKIP
-rsn_pairwise=CCMP
-ssid=NETWORK
-wpa_passphrase=PASSWORD
+### Edit /etc/hosts and add:
+127.0.0.1 localhost
+127.0.0.1 ubuntu
 
-sudo nano /etc/default/hostapd
+### Edit and add /etc/sysctl.conf
 
-DAEMON_CONF="/etc/hostapd/hostapd.conf"
-
-sudo nano /etc/sysctl.conf
-
+kernel.sysrq=1
+vm.panic_on_oom=1
+kernel.panic=5
+vm.swaapiness=10
 net.ipv4.ip_forward=1
 
-sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-sudo sh -c "iptables-save > /etc/iptables.ipv4.nat"
+#Disable IP6 entirely
+net.ipv6.conf.all.disable_ipv6=1
+net.ipv6.conf.default.disable_ipv6=1
+net.ipv6.conf.eth0.disable_ipv6=1
 
-sudo nano /etc/rc.local
-iptables-restore < /etc/iptables.ipv4.nat
+### (5) # Edit netplan:
 
-sudo systemctl daemon-reload
+sudo nano /etc/netplan TAB:
 
-sudo nano /etc/network/interfaces
+network:
+  renderer: NetworkManager
+  ethernets:
+    eth0:
+      dhcp4: true
+      dhcp6: false
+      optional: true
+    enx001e101f0000:
+      dhcp4: true
+      dhcp6: false
+      optional: true
+  wifis:
+    wlxd037457c32f3:
+      dhcp4: true
+      dhcp6: false
+      optional: true
+      access-points:
+        "My WiFi Here!":
+          password: ""******""
+    wlxd03745867865:
+      dhcp4: true
+      dhcp6: false
+      addresses:
+      - 192.168.4.1/24
+      optional: true
+      access-points:
+        "ctOS PiHole":
+          password: "******"
+          mode: ap
+  version: 2
 
-auto br0
-iface br0 inet manual
-bridge_ports eth0 wlan0
+sudo iptables -F
+sudo iptables -X
+sudo iptables -A OUTPUT -j ACCEPT -m comment --comment "Accept all outgoing"
+sudo iptables -A INPUT -j ACCEPT -m comment --comment "Accept all incoming"
+sudo iptables -A FORWARD -j ACCEPT -m comment --comment "Accept all forwarded"
 
-sudo systemctl unmask hostapd && sudo systemctl start hostapd && sudo systemctl restart dnsmasq
+sudo netplan apply
 
+### Check if there is any process on 53 port:
+$ sudo lsof -i -P -n | grep 53
+$ netstat -atun
 
+### PiHole
 
+sudo usermod -aG docker ubuntu
+sudo mkdir -p /srv/containers/pihole/{etc,dnsmasq.d}
 
+To RUN:
+docker stop pihole
+docker rm pihole
+docker run -d \
+--name=pihole \
+--network host \
+--dns 1.0.0.1 \
+--dns 8.8.4.4 \
+--hostname=pihole \
+--no-healthcheck \
+--restart=unless-stopped \
+--cap-add=NET_ADMIN \
+--privileged \
+-e INTERFACE=wlxd03745867865 \
+-e DNSMASQ_LISTENING=single \
+-e SERVERIP=127.0.0.1 \
+-e WEBPASSWORD="******" \
+-v /etc/localtime:/etc/localtime:ro \
+-v /srv/containers/pihole/etc/:/etc/pihole \
+-v /srv/containers/pihole/dnsmasq.d/:/etc/dnsmasq.d \
+pihole/pihole:latest
 
+TURN ON DHCP ON PIHOLE because NetPlan doesn't have it!!
+Set IP and Gateway: 192.168.4.1
+Pool: 192.168.4.10 to 192.168.4.200
 
-sudo brctl addbr br0; sudo brctl addif br0 eth0
+sudo reboot
+
+# To multiple Interfaces under PiHole:
+Create /etc/dnsmasq.d/99-interfaces.conf and add:
+interface=eth1
+
+On Netplan:
+    eth1:
+      dhcp4: true
+      dhcp6: false
+      addresses:
+      - 192.168.4.1/24
+      optional: true
+
+Re-do container/pihole config!
