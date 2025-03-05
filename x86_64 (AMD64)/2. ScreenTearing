@@ -22,3 +22,5 @@ Section "Device"
  Driver "radeon"
  Option "TearFree" "on"
 EndSection
+
+RE-CHECK DISPLAY with xrandr command and adjust the autostart file!
