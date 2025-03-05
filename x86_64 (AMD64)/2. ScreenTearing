@@ -1,0 +1,24 @@
+sudo mkdir /etc/X11/xorg.conf.d/
+
+INTEL:
+
+Crie um arquivo chamado 20-intel.conf:
+sudo nano /etc/X11/xorg.conf.d/20-intel.conf
+
+Section "Device"
+ Identifier "Intel Graphics"
+ Driver "Intel"
+ Option "AccelMethod" "sna"
+ Option "TearFree" "true"
+EndSection
+
+AMD:
+
+Crie um arquivo chamado 20-amd.conf:
+sudo nano /etc/X11/xorg.conf.d/20-amd.conf
+
+Section "Device"
+ Identifier "Radeon"
+ Driver "radeon"
+ Option "TearFree" "on"
+EndSection
