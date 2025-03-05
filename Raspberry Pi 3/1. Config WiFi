@@ -3,7 +3,7 @@ sudo apt install hostapd dnsmasq bridge-utils
 sudo nano /etc/dhcpcd.conf
 
 interface wlan0
-static ip_address=192.168.4.10/24
+static ip_address=192.168.4.1/24
 denyinterfaces eth0
 denyinterfaces wlan0
 
@@ -52,14 +52,11 @@ auto br0
 iface br0 inet manual
 bridge_ports eth0 wlan0
 
-sudo systemctl unmask hostapd
-sudo systemctl start hostapd
-sudo systemctl restart dnsmasq
+sudo systemctl unmask hostapd && sudo systemctl start hostapd && sudo systemctl restart dnsmasq
+
+
+
+
+
 
 sudo brctl addbr br0; sudo brctl addif br0 eth0
-
-sudo nano /etc/systemd/system/multi-user.target.wants/NetworkManager.service
-
-add
-ExecStartPre=/bin/sleep 15
-to [SERVICE]
