@@ -6,7 +6,7 @@ sudo systemctl stop systemd-resolved && sudo systemctl disable systemd-resolved 
 
 Then edit /etc/resolv.conf creating a new file and put this inside:
 nameserver 127.0.0.1
-search ubuntu
+search HOSTNAME
 
 # Original resolv.conf (if needed on emergency):
 nameserver 127.0.0.53
@@ -15,7 +15,7 @@ search localdomain
 
 ### Edit /etc/hosts and add:
 127.0.0.1 localhost
-127.0.0.1 ubuntu
+127.0.0.1 HOSTNAME
 
 ### Edit and add /etc/sysctl.conf
 
