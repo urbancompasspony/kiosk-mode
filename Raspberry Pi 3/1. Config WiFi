@@ -93,6 +93,8 @@ docker run -d \
 -v /srv/containers/pihole/dnsmasq.d/:/etc/dnsmasq.d \
 pihole/pihole:latest
 
+docker exec pihole pihole-FTL --config webserver.port 8443
+
 TURN ON DHCP ON PIHOLE because NetPlan doesn't have it!!
 Set IP and Gateway: 192.168.4.1
 Pool: 192.168.4.10 to 192.168.4.200
@@ -104,3 +106,5 @@ sudo nano /etc/systemd/system/multi-user.target.wants/NetworkManager.service
 add
 ExecStartPre=/bin/sleep 15
 to [SERVICE]
+
+
