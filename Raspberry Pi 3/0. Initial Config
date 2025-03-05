@@ -1,7 +1,10 @@
 
 sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y
 
-sudo apt install docker.io net-tools speedtest-cli whois netdiscover iperf arp-scan traceroute sshpass xinit xorg openbox xdotool
+sudo apt install docker.io net-tools speedtest-cli whois netdiscover iperf arp-scan traceroute sshpass \
+libatasmart-bin smartmontools zip unzip p7zip-full 7zip p7zip cifs-utils rsnapshot rclone iotop \
+haveged stress lm-sensors cmatrix btop inxi tree dialog btrfs-progs build-essential unrar \
+docker.io net-tools speedtest-cli whois netdiscover iperf arp-scan traceroute sshpass xinit xorg openbox xdotool
 
 sudo apt purge needrestart
 
