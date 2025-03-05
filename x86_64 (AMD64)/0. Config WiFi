@@ -1,6 +1,6 @@
 ### For Ubuntu Server 22.04 LTS
 
-sudo apt install network-manager && sudo apt purge dnsmasq-base
+sudo apt install network-manager apache2 && sudo apt purge dnsmasq-base
 
 sudo systemctl stop systemd-resolved && sudo systemctl disable systemd-resolved && sudo systemctl mask systemd-resolved && sudo unlink /etc/resolv.conf
 
@@ -78,7 +78,7 @@ docker run -d \
 --no-healthcheck \
 --restart=unless-stopped \
 --cap-add=NET_ADMIN \
--e INTERFACE=wlan0 \
+-e INTERFACE=****** \
 -e FTLCONF_dns_listeningMode=all \
 -e FTLCONF_webserver_api_password="******" \
 -e TZ=America/Bahia \
