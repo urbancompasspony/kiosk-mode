@@ -4,7 +4,7 @@ sudo apt install network-manager && sudo apt purge dnsmasq-base
 
 sudo systemctl stop systemd-resolved && sudo systemctl disable systemd-resolved && sudo systemctl mask systemd-resolved && sudo unlink /etc/resolv.conf
 
-Then edit /etc/resolv.conf creating a new file and put this inside:
+sudo nano /etc/resolv.conf creating a new file and put this inside:
 nameserver 127.0.0.1
 search HOSTNAME
 
@@ -13,11 +13,11 @@ nameserver 127.0.0.53
 options edns0 trust-ad
 search localdomain
 
-### Edit /etc/hosts and add:
+sudo nano /etc/hosts
 127.0.0.1 localhost
 127.0.0.1 HOSTNAME
 
-### Edit and add /etc/sysctl.conf
+sudo nano /etc/sysctl.conf
 
 kernel.sysrq=1
 vm.panic_on_oom=1
@@ -41,35 +41,21 @@ network:
       dhcp4: true
       dhcp6: false
       optional: true
-    enx001e101f0000:
-      dhcp4: true
-      dhcp6: false
-      optional: true
   wifis:
-    wlxd037457c32f3:
-      dhcp4: true
-      dhcp6: false
-      optional: true
-      access-points:
-        "My WiFi Here!":
-          password: ""******""
-    wlxd03745867865:
+    wlan0:
       dhcp4: true
       dhcp6: false
       addresses:
       - 192.168.4.1/24
       optional: true
       access-points:
-        "ctOS PiHole":
+        "rpi-kiosk":
           password: "******"
           mode: ap
   version: 2
 
-sudo iptables -F
-sudo iptables -X
-sudo iptables -A OUTPUT -j ACCEPT -m comment --comment "Accept all outgoing"
-sudo iptables -A INPUT -j ACCEPT -m comment --comment "Accept all incoming"
-sudo iptables -A FORWARD -j ACCEPT -m comment --comment "Accept all forwarded"
+sudo iptables -F && sudo iptables -X && sudo iptables -A OUTPUT -j ACCEPT -m comment --comment "Accept all outgoing"
+sudo iptables -A INPUT -j ACCEPT -m comment --comment "Accept all incoming" && sudo iptables -A FORWARD -j ACCEPT -m comment --comment "Accept all forwarded"
 
 sudo netplan apply
 
