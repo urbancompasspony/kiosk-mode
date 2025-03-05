@@ -1,0 +1,16 @@
+
+sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y
+
+sudo apt install docker.io net-tools speedtest-cli whois netdiscover iperf arp-scan traceroute sshpass xinit xorg openbox xdotool
+
+sudo apt purge needrestart
+
+sudo dd if=/dev/zero of=/swapfile bs=1k count=1000000
+sudo chmod 0600 /swapfile
+sudo mkswap /swapfile; sudo swapon /swapfile
+echo "/swapfile none swap sw 0 0" | sudo tee -a /etc/fstab
+
+sudo timedatectl set-timezone Etc/GMT+3
+sudo timedatectl set-local-rtc 1
+
+sudo usermod -aG docker administrador
