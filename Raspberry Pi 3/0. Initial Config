@@ -1,3 +1,4 @@
+UBUNTU SERVER 22.04 LTS
 
 sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y
 
