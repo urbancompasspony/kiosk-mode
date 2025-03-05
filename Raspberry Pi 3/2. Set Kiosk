@@ -121,4 +121,7 @@ nano ~/.bashrc
 alias menukiosk='curl -sSL https://raw.githubusercontent.com/urbancompasspony/kiosk-mode/refs/heads/main/MENU | bash'
 . .bashrc
 
+run command menukiosk
+set website to http://localhost
+
 To close: CTRL ALT BACKSPACE
