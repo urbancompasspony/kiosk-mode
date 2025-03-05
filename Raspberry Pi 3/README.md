@@ -1,3 +1,3 @@
 ## Atention
 
-VIDEOS can run too slow!
+VIDEOS are slow, even low quality ones!
