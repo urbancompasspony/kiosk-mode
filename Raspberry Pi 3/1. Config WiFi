@@ -86,7 +86,7 @@ docker run -d \
 --cap-add=NET_ADMIN \
 -e INTERFACE=wlan0 \
 -e FTLCONF_dns_listeningMode=all \
--e FTLCONF_webserver_api_password="5V06auso" \
+-e FTLCONF_webserver_api_password="******" \
 -e TZ=America/Bahia \
 -v /etc/localtime:/etc/localtime:ro \
 -v /srv/containers/pihole/etc/:/etc/pihole \
