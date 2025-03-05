@@ -10,12 +10,8 @@ openvpn curl nmap parallel rclone openssh-server samba samba-dsdb-modules samba-
 
 sudo systemctl disable systemd-networkd-wait-online.service && sudo systemctl mask systemd-networkd-wait-online.service && sudo systemctl disable NetworkManager-wait-online.service && sudo systemctl mask NetworkManager-wait-online.service
 
-sudo dd if=/dev/zero of=/swapfile bs=1k count=1000000
-sudo chmod 0600 /swapfile
-sudo mkswap /swapfile; sudo swapon /swapfile
-echo "/swapfile none swap sw 0 0" | sudo tee -a /etc/fstab
+sudo dd if=/dev/zero of=/swapfile bs=1k count=1000000 && sudo chmod 0600 /swapfile && sudo mkswap /swapfile; sudo swapon /swapfile && echo "/swapfile none swap sw 0 0" | sudo tee -a /etc/fstab
 
-sudo timedatectl set-timezone Etc/GMT+3
-sudo timedatectl set-local-rtc 1
+sudo timedatectl set-timezone Etc/GMT+3 && sudo timedatectl set-local-rtc 1
 
 sudo usermod -aG docker administrador
