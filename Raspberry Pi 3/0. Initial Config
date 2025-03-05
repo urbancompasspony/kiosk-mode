@@ -1,4 +1,4 @@
-UBUNTU SERVER 22.04 LTS
+UBUNTU SERVER 22.04 LTS and RPi3!
 
 sudo apt update && sudo apt upgrade -y && sudo apt autoremove
 
