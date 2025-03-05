@@ -114,6 +114,10 @@ ExecStart=
 ExecStart=-/sbin/agetty --noissue --autologin administrador %I $TERM
 Type=idle
 
+nano ~/.bashrc
+alias menukiosk='curl -sSL https://raw.githubusercontent.com/urbancompasspony/kiosk-mode/refs/heads/main/MENU | bash'
+. .bashrc
+
 Reboot.
 
 To close: CTRL ALT BACKSPACE
