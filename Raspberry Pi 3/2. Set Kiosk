@@ -114,6 +114,14 @@ ExecStart=
 ExecStart=-/sbin/agetty --noissue --autologin administrador %I $TERM
 Type=idle
 
+TO ROTATE SCREEN ON HDMI:
+sudo nano /boot/firmware/config.txt
+
+display_rotate=0 # normal (or set nothing)
+display_rotate=1 # rotate 90 degrees to right
+display_rotate=2 # rotate 180 degrees to upside down
+display_rotate=3 # rotate 270 degrees to left
+
 sudo apt install apache2
 sudo nano /var/www/html/index.html
 
