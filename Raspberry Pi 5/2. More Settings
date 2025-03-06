@@ -1,3 +1,6 @@
+sudo apt install apache2
+sudo nano /var/www/html/index.html
+
 sudo mkdir -p /srv/containers/filebrowser/{config,database}
 sudo chmod 777 -R /srv/containers/filebrowser/database && sudo chmod 777 -R /var/www/
 
