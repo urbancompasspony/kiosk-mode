@@ -1,6 +1,6 @@
 ### For Ubuntu Server 22.04 LTS
 
-sudo apt install network-manager apache2 && sudo apt purge dnsmasq-base
+sudo apt install network-manager && sudo apt purge dnsmasq-base
 
 sudo systemctl stop systemd-resolved && sudo systemctl disable systemd-resolved && sudo systemctl mask systemd-resolved && sudo unlink /etc/resolv.conf
 
@@ -92,6 +92,9 @@ docker exec pihole pihole-FTL --config webserver.port 8443
 TURN ON DHCP ON PIHOLE because NetPlan doesn't have it!!
 Set IP and Gateway: 192.168.4.1
 Pool: 192.168.4.10 to 192.168.4.200
+
+sudo apt install apache2
+sudo nano /var/www/html/index.html
 
 sudo mkdir -p /srv/containers/filebrowser/{config,database}
 sudo chmod 777 -R /srv/containers/filebrowser/database && sudo chmod 777 -R /var/www/
