@@ -1,7 +1,7 @@
 >>> >>> >>> >>> >>> >>> >>> >>> >>>
 0. Adjusting WebLocal
 
-sudo apt install apache2
+sudo apt install apache2 -y
 sudo nano /var/www/html/index.html
 
 sudo mkdir -p /srv/containers/filebrowser/{config,database}
