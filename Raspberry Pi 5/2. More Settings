@@ -20,10 +20,4 @@ docker run -d \
 -v /srv/containers/filebrowser/database:/database \
 filebrowser/filebrowser:latest
 
-sudo nano /etc/systemd/system/multi-user.target.wants/NetworkManager.service
-
-add
-ExecStartPre=/bin/sleep 15
-to [SERVICE]
-
 sudo reboot
