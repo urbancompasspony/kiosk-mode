@@ -122,9 +122,6 @@ display_rotate=1 # rotate 90 degrees to right
 display_rotate=2 # rotate 180 degrees to upside down
 display_rotate=3 # rotate 270 degrees to left
 
-sudo apt install apache2
-sudo nano /var/www/html/index.html
-
 nano ~/.bashrc
 alias menukiosk='curl -sSL https://raw.githubusercontent.com/urbancompasspony/kiosk-mode/refs/heads/main/MENU | bash'
 . .bashrc
