@@ -2,3 +2,5 @@
 
 FULL OF PROBLEMS!
 DO NOT USE RPi 5 to create this system.
+
+UNTIL 2025 IT DO NOT WORK AS WISHED.
