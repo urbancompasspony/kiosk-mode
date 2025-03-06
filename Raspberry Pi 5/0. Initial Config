@@ -19,3 +19,27 @@ sudo usermod -aG docker administrador
 
 sudo raspi-config
 set timezone for WIFI!
+
+sudo apt install apache2
+sudo nano /var/www/html/index.html
+
+sudo mkdir -p /srv/containers/filebrowser/{config,database}
+sudo chmod 777 -R /srv/containers/filebrowser/database && sudo chmod 777 -R /var/www/
+
+sudo wget https://raw.githubusercontent.com/urbancompasspony/kiosk-mode/refs/heads/main/1.%20Default%20Settings/settings.json -O /srv/containers/filebrowser/config/.filebrowser.json
+
+docker run -d \
+--name=filebrowser \
+--network host \
+--hostname=filebrowser \
+--no-healthcheck \
+--restart=unless-stopped \
+-u $(id -u):$(id -g) \
+-p 8081:8081 \
+-v /etc/localtime:/etc/localtime:ro \
+-v /var/www:/srv \
+-v /srv/containers/filebrowser/config/.filebrowser.json:/.filebrowser.json \
+-v /srv/containers/filebrowser/database:/database \
+filebrowser/filebrowser:latest
+
+sudo reboot
