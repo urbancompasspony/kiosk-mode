@@ -9,7 +9,7 @@ sudo chmod 777 -R /srv/containers/filebrowser/database && sudo chmod 777 -R /var
 
 sudo wget https://raw.githubusercontent.com/urbancompasspony/kiosk-mode/refs/heads/main/1.%20Default%20Settings/settings.json -O /srv/containers/filebrowser/config/.filebrowser.json
 
-docker run -d \
+sudo docker run -d \
 --name=filebrowser \
 --network host \
 --hostname=filebrowser \
