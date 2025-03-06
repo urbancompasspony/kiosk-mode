@@ -4,7 +4,7 @@ sudo apt update && sudo apt upgrade -y && sudo apt autoremove
 
 sudo apt purge needrestart cloud-init snapd unattended-upgrades plank deja-dup evolution evolution-data-server bluez blueman bluetooth -y
 
-sudo apt install docker.io net-tools speedtest-cli whois netdiscover iperf arp-scan traceroute sshpass network-manager \
+sudo apt install raspi-config docker.io net-tools speedtest-cli whois netdiscover iperf arp-scan traceroute sshpass network-manager \
 libatasmart-bin smartmontools zip unzip p7zip-full 7zip p7zip cifs-utils rsnapshot rclone iotop \
 haveged stress lm-sensors cmatrix btop inxi tree dialog btrfs-progs build-essential unrar \
 openvpn curl nmap parallel rclone openssh-server samba samba-dsdb-modules samba-vfs-modules beep xinit xorg openbox xdotool
@@ -16,3 +16,6 @@ sudo dd if=/dev/zero of=/swapfile bs=1k count=1000000 && sudo chmod 0600 /swapfi
 sudo timedatectl set-timezone Etc/GMT+3 && sudo timedatectl set-local-rtc 1
 
 sudo usermod -aG docker administrador
+
+sudo raspi-config
+set timezone for WIFI!
