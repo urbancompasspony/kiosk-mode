@@ -99,6 +99,9 @@ TURN ON DHCP ON PIHOLE because NetPlan doesn't have it!!
 Set IP and Gateway: 192.168.4.1
 Pool: 192.168.4.10 to 192.168.4.200
 
+sudo apt install apache2
+sudo nano /var/www/html/index.html
+
 sudo mkdir -p /srv/containers/filebrowser/{config,database}
 sudo chmod 777 -R /srv/containers/filebrowser/database && sudo chmod 777 -R /var/www/
 
