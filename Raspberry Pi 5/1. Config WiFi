@@ -1,5 +1,10 @@
 ### For Ubuntu Server
 
+
+# INTERNAL WIFI NOT WORKING:
+brcmfmac: brcmf_set_channel: set chanspec 0xd026 fail, reason -52
+If you wanna try, run:
+
 sudo apt install network-manager && sudo apt purge dnsmasq-base
 
 sudo systemctl stop systemd-resolved && sudo systemctl disable systemd-resolved && sudo systemctl mask systemd-resolved && sudo unlink /etc/resolv.conf
