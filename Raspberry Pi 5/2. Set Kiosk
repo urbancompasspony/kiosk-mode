@@ -130,3 +130,5 @@ run command menukiosk
 set website to http://localhost
 
 To close: CTRL ALT BACKSPACE
+
+sudo reboot
