@@ -41,5 +41,3 @@ docker run -d \
 -v /srv/containers/filebrowser/config/.filebrowser.json:/.filebrowser.json \
 -v /srv/containers/filebrowser/database:/database \
 filebrowser/filebrowser:latest
-
-sudo reboot
