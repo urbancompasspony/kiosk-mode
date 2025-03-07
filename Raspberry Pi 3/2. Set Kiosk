@@ -126,6 +126,13 @@ nano ~/.bashrc
 alias menukiosk='curl -sSL https://raw.githubusercontent.com/urbancompasspony/kiosk-mode/refs/heads/main/MENU | bash'
 . .bashrc
 
+# ScreenTearing
+sudo nano /boot/firmware/config.txt
+
+[all]
+dtoverlay=vc4-fkms-v3d
+gpu_mem=128
+
 run command menukiosk
 set website to http://localhost
 
