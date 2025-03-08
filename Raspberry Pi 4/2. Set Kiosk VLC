@@ -10,8 +10,12 @@ xset -dpms
 
 setxkbmap -option terminate:ctrl_alt_bksp
 
-pathvideo="/var/www/html"
-vlc $pathvideo/video1.mp4 $pathvideo/video2.mp4 $pathvideo/video3.mp4 --fullscreen --loop --no-mouse-events --no-osd && killall openbox
+vlc /home/administrador/kiosk/playlist.m3u --no-qt-privacy-ask --fullscreen --loop --no-mouse-events --no-osd && killall openbox
+
+nano /home/administrador/kiosk/playlist.m3u
+/var/www/html/video1.mp4
+/var/www/html/video2.mp4
+/var/www/html/video3.mp4
 
 >>> >>> >>> >>> >>> >>> >>> >>> >>>
 4. Profile
