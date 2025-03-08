@@ -22,9 +22,6 @@ nano /home/administrador/kiosk/playlist.m3u
 /var/www/html/video2.mp4
 /var/www/html/video3.mp4
 
-Youtube:
-Use URLs inside m3u file.
-
 >>> >>> >>> >>> >>> >>> >>> >>> >>>
 4. Profile
 nano /home/administrador/.profile
