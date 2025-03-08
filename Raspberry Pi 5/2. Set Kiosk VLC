@@ -1,7 +1,9 @@
 >>> >>> >>> >>> >>> >>> >>> >>> >>>
+1. Install VLC
 sudo apt install vlc
 
 >>> >>> >>> >>> >>> >>> >>> >>> >>>
+2. set Autostart
 sudo nano /etc/xdg/openbox/autostart
 
 xset s off
@@ -10,8 +12,18 @@ xset -dpms
 
 setxkbmap -option terminate:ctrl_alt_bksp
 
-pathvideo="/var/www/html"
-vlc $pathvideo/video1.mp4 $pathvideo/video2.mp4 $pathvideo/video3.mp4 --fullscreen --loop --no-mouse-events --no-osd && killall openbox
+vlc /home/administrador/kiosk/playlist.m3u --key-nav-interval=0 --mouse-hide-timeout=0 --no-qt-privacy-ask --fullscreen --loop --no-mouse-events --no-osd && killall openbox
+
+>>> >>> >>> >>> >>> >>> >>> >>> >>>
+3. Set m3u file:
+nano /home/administrador/kiosk/playlist.m3u
+
+/var/www/html/video1.mp4
+/var/www/html/video2.mp4
+/var/www/html/video3.mp4
+
+Youtube:
+Use URLs inside m3u file.
 
 >>> >>> >>> >>> >>> >>> >>> >>> >>>
 4. Profile
