@@ -1,0 +1,53 @@
+>>> >>> >>> >>> >>> >>> >>> >>> >>>
+sudo apt install vlc
+
+>>> >>> >>> >>> >>> >>> >>> >>> >>>
+sudo nano /etc/xdg/openbox/autostart
+
+xset s off
+xset s noblank
+xset -dpms
+
+setxkbmap -option terminate:ctrl_alt_bksp
+
+pathvideo="/var/www/html"
+vlc $pathvideo/video1.mp4 $pathvideo/video2.mp4 $pathvideo/video3.mp4 --fullscreen --loop --no-mouse-events --no-osd && killall openbox
+
+>>> >>> >>> >>> >>> >>> >>> >>> >>>
+4. Profile
+nano /home/administrador/.profile
+
+[[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && startx -- -nocursor
+
+>>> >>> >>> >>> >>> >>> >>> >>> >>>
+5. AutoLogin
+sudo nano /etc/systemd/logind.conf
+
+[Login]
+NAutoVTs=6
+ReserveVT=7
+
+sudo mkdir /etc/systemd/system/getty@tty1.service.d/; sudo nano /etc/systemd/system/getty@tty1.service.d/override.conf
+
+[Service]
+ExecStart=
+ExecStart=-/sbin/agetty --noissue --autologin administrador %I $TERM
+Type=idle
+
+TO ROTATE SCREEN ON HDMI:
+sudo nano /boot/firmware/config.txt
+
+display_rotate=0 # normal (or set nothing)
+display_rotate=1 # rotate 90 degrees to right
+display_rotate=2 # rotate 180 degrees to upside down
+display_rotate=3 # rotate 270 degrees to left
+
+# ScreenTearing
+sudo nano /boot/firmware/config.txt
+
+[all]
+dtoverlay=vc4-fkms-v3d
+gpu_mem=128
+
+reboot
+To close: CTRL ALT BACKSPACE
