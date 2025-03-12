@@ -1,6 +1,6 @@
 ## Atention
 
-VIDEOS VLC are slow, even low quality ones!
+VLC for VIDEOS is slow, even low quality ones!
 Use it with carefull.
 
 Use Browser for videos!
