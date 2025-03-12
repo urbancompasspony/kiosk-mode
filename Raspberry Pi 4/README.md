@@ -3,4 +3,4 @@
 VLC for VIDEOS is slow, even low quality ones!
 Use it with carefull.
 
-Use Browser for videos!
+Use Browser instead!
