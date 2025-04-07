@@ -133,6 +133,10 @@ sudo nano /boot/firmware/config.txt
 dtoverlay=vc4-fkms-v3d
 gpu_mem=128
 
+force 1080p:
+hdmi_group=1
+hdmi_mode=16
+
 run command menukiosk
 set website to http://localhost
 
