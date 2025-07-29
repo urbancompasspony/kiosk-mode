@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kiosk Manager - Interface Web</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+        .header p { font-size: 1.1em; opacity: 0.9; }
+        .main-content { padding: 40px; }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .menu-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+            text-align: center;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            border-color: #3498db;
+        }
+
+        .menu-card h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .menu-card p {
+            color: #7f8c8d;
+            line-height: 1.6;
+        }
+
+        .menu-card.primary {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+        }
+
+        .menu-card.primary h3,
+        .menu-card.primary p {
+            color: white;
+        }
+
+        .menu-card.success {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+        }
+
+        .menu-card.success h3,
+        .menu-card.success p {
+            color: white;
+        }
+
+        .menu-card.warning {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+        }
+
+        .menu-card.warning h3,
+        .menu-card.warning p {
+            color: white;
+        }
+
+        .menu-card.danger {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+        }
+
+        .menu-card.danger h3,
+        .menu-card.danger p {
+            color: white;
+        }
+
+        .config-form {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .config-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .form-group .help-text {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+
+        .btn {
+            background: #3498db;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s ease;
+            margin: 5px;
+        }
+
+        .btn:hover { background: #2980b9; }
+        .btn-success { background: #27ae60; }
+        .btn-success:hover { background: #229954; }
+        .btn-danger { background: #e74c3c; }
+        .btn-danger:hover { background: #c0392b; }
+        .btn-warning { background: #f39c12; }
+        .btn-warning:hover { background: #e67e22; }
+        .btn-secondary { background: #95a5a6; }
+        .btn-secondary:hover { background: #7f8c8d; }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .loading.active { display: block; }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin { 0%{transform:rotate(0deg);} 100%{transform:rotate(360deg);} }
+
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .alert.active { display: block; }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .current-config {
+            background: #e8f4fd;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .current-config h4 {
+            color: #1976D2;
+            margin-bottom: 15px;
+        }
+
+        .config-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .config-item:last-child {
+            border-bottom: none;
+        }
+
+        .config-label {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .config-value {
+            font-family: monospace;
+            background: #f8f9fa;
+            padding: 4px 8px;
+            border-radius: 4px;
+            color: #495057;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-running { background: #27ae60; }
+        .status-stopped { background: #e74c3c; }
+        .status-unknown { background: #95a5a6; }
+
+        .file-manager {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .file-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+        }
+
+        .file-item {
+            padding: 10px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .file-item:last-child {
+            border-bottom: none;
+        }
+
+        .file-item:hover {
+            background: #f8f9fa;
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .file-actions button {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            color: #2c3e50;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #95a5a6;
+        }
+
+        .close-btn:hover {
+            color: #2c3e50;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .logs-container {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 20px 0;
+        }
+
+        .platform-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .platform-btn {
+            padding: 10px 20px;
+            background: #ecf0f1;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .platform-btn.active {
+            background: #3498db;
+            color: white;
+            border-color: #2980b9;
+        }
+
+        .platform-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .config-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+            
+            .platform-selector {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🖥️ Kiosk Manager</h1>
+            <p>Interface Web para Gerenciamento do Sistema Kiosk Mode</p>
+        </div>
+
+        <div class="main-content">
+            <!-- Alert Container -->
+            <div id="alert-container" class="alert"></div>
+
+            <!-- Loading -->
+            <div id="loading" class="loading">
+                <div class="spinner"></div>
+                <p id="loading-text">Processando...</p>
+            </div>
+
+            <!-- Platform Selector -->
+            <div class="platform-selector">
+                <div class="platform-btn active" onclick="selectPlatform('x86_64')">
+                    💻 x86_64 (AMD64)
+                </div>
+                <div class="platform-btn" onclick="selectPlatform('rpi3')">
+                    🍓 Raspberry Pi 3
+                </div>
+                <div class="platform-btn" onclick="selectPlatform('rpi4')">
+                    🍓 Raspberry Pi 4
+                </div>
+                <div class="platform-btn" onclick="selectPlatform('rpi5')">
+                    🍓 Raspberry Pi 5
+                </div>
+            </div>
+
+            <!-- Current Configuration -->
+            <div id="current-config" class="current-config">
+                <h4>📋 Configuração Atual</h4>
+                <div class="config-item">
+                    <span class="config-label">Status do Kiosk:</span>
+                    <span class="config-value">
+                        <span id="kiosk-status" class="status-indicator status-unknown"></span>
+                        <span id="kiosk-status-text">Verificando...</span>
+                    </span>
+                </div>
+                <div class="config-item">
+                    <span class="config-label">Websites:</span>
+                    <span id="current-websites" class="config-value">Carregando...</span>
+                </div>
+                <div class="config-item">
+                    <span class="config-label">Duração:</span>
+                    <span id="current-duration" class="config-value">Carregando...</span>
+                </div>
+                <div class="config-item">
+                    <span class="config-label">Zoom:</span>
+                    <span id="current-zoom" class="config-value">Carregando...</span>
+                </div>
+            </div>
+
+            <!-- Main Menu -->
+            <div id="main-menu" class="menu-grid">
+                <div class="menu-card primary" onclick="showConfigForm()">
+                    <h3>⚙️ Configurar Kiosk</h3>
+                    <p>Configurar websites, duração, zoom e outras opções do kiosk.</p>
+                </div>
+
+                <div class="menu-card success" onclick="restartKiosk()">
+                    <h3>🔄 Reiniciar Sistema</h3>
+                    <p>Reinicia o sistema para aplicar as mudanças.</p>
+                </div>
+
+                <div class="menu-card warning" onclick="showFileManager()">
+                    <h3>📁 Gerenciar Arquivos</h3>
+                    <p>Upload e gerenciamento de vídeos, imagens e outros arquivos.</p>
+                </div>
+
+                <div class="menu-card" onclick="showSystemInfo()">
+                    <h3>📊 Informações do Sistema</h3>
+                    <p>Visualizar informações detalhadas do sistema e hardware.</p>
+                </div>
+
+                <div class="menu-card" onclick="showLogs()">
+                    <h3>📋 Logs do Sistema</h3>
+                    <p>Visualizar logs de erro e debug do sistema kiosk.</p>
+                </div>
+
+                <div class="menu-card danger" onclick="stopKiosk()">
+                    <h3>⏹️ Parar Kiosk</h3>
+                    <p>Para o kiosk temporariamente para manutenção.</p>
+                </div>
+            </div>
+
+            <!-- Configuration Form -->
+            <div id="config-form" class="config-form">
+                <h3>⚙️ Configuração do Kiosk</h3>
+                <form id="kiosk-config-form">
+                    <div class="form-group">
+                        <label for="websites">🌐 Websites:</label>
+                        <textarea id="websites" name="websites" placeholder="https://example.com https://google.com"></textarea>
+                        <div class="help-text">URLs separadas por espaço. Serão alternadas pela duração configurada.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="duration">⏱️ Duração (segundos):</label>
+                        <input type="number" id="duration" name="duration" min="1" max="3600" value="10">
+                        <div class="help-text">Tempo em segundos para alternar entre os sites.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="zoom-type">🔍 Tipo de Zoom:</label>
+                        <select id="zoom-type" name="zoom-type" onchange="toggleZoomOptions()">
+                            <option value="none">Nenhum</option>
+                            <option value="in">Zoom In (Aumentar)</option>
+                            <option value="out">Zoom Out (Diminuir)</option>
+                        </select>
+                        <div class="help-text">Nunca habilite Zoom In e Zoom Out ao mesmo tempo!</div>
+                    </div>
+
+                    <div class="form-group" id="zoom-in-group" style="display: none;">
+                        <label for="zoom-in">📈 Zoom In (%):</label>
+                        <select id="zoom-in" name="zoom-in">
+                            <option value="0">Desabilitado</option>
+                            <option value="110">110%</option>
+                            <option value="125">125%</option>
+                            <option value="150">150%</option>
+                            <option value="175">175%</option>
+                            <option value="200">200%</option>
+                            <option value="250">250%</option>
+                            <option value="300">300%</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="zoom-out-group" style="display: none;">
+                        <label for="zoom-out">📉 Zoom Out (%):</label>
+                        <select id="zoom-out" name="zoom-out">
+                            <option value="0">Desabilitado</option>
+                            <option value="90">90%</option>
+                            <option value="80">80%</option>
+                            <option value="75">75%</option>
+                            <option value="67">67%</option>
+                            <option value="50">50%</option>
+                            <option value="33">33%</option>
+                            <option value="25">25%</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="wait-time">⏳ Tempo de Espera (segundos):</label>
+                        <input type="number" id="wait-time" name="wait-time" min="0" max="60" value="10">
+                        <div class="help-text">Segundos antes do script começar, útil para máquinas lentas.</div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="hideConfigForm()">Cancelar</button>
+                        <button type="submit" class="btn btn-success">💾 Salvar Configuração</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- File Manager -->
+            <div id="file-manager" class="file-manager" style="display: none;">
+                <h3>📁 Gerenciador de Arquivos</h3>
+                
+                <div class="form-group">
+                    <label for="file-upload">📤 Upload de Arquivo:</label>
+                    <input type="file" id="file-upload" multiple accept="video/*,image/*,.txt,.html">
+                    <button type="button" class="btn btn-primary" onclick="uploadFiles()">Enviar Arquivos</button>
+                </div>
+
+                <div class="file-list" id="file-list">
+                    <div class="file-item">
+                        <span>📄 Carregando lista de arquivos...</span>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="hideFileManager()">Fechar</button>
+                    <button type="button" class="btn btn-primary" onclick="refreshFileList()">🔄 Atualizar</button>
+                </div>
+            </div>
+
+            <!-- System Info -->
+            <div id="system-info" class="current-config" style="display: none;">
+                <h4>📊 Informações do Sistema</h4>
+                <div id="system-details">
+                    <p>🔄 Carregando informações...</p>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="hideSystemInfo()">Fechar</button>
+                </div>
+            </div>
+
+            <!-- Logs Container -->
+            <div id="logs-container" class="logs-container" style="display: none;">
+                <h4 style="color: #ecf0f1; margin-bottom: 15px;">📋 Logs do Sistema</h4>
+                <div id="logs-content">
+                    Carregando logs...
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="hideLogs()">Fechar</button>
+                    <button type="button" class="btn btn-primary" onclick="refreshLogs()">🔄 Atualizar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmation-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Confirmação</h3>
+                <button class="close-btn" onclick="hideModal()">&times;</button>
+            </div>
+            <div id="modal-body">
+                <p id="modal-message">Tem certeza que deseja continuar?</p>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" onclick="hideModal()">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="modal-confirm-btn" onclick="confirmAction()">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configurações globais
+        const CGI_URL = '/cgi-bin/kiosk-manager.cgi';
+        let currentPlatform = 'x86_64';
+        let pendingAction = null;
+
+        // Estado do aplicativo
+        let kioskRunning = false;
+        let currentConfig = {
+            websites: '',
+            duration: '10',
+            zoomIn: '0',
+            zoomOut: '0',
+            waitTime: '10'
+        };
+
+        // === FUNÇÕES DE PLATAFORMA ===
+        function selectPlatform(platform) {
+            // Remover classe active de todos os botões
+            document.querySelectorAll('.platform-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Adicionar classe active ao botão selecionado
+            event.target.classList.add('active');
+            
+            currentPlatform = platform;
+            showAlert(`Plataforma selecionada: ${getPlatformName(platform)}`, 'info');
+            
+            // Recarregar configuração para a nova plataforma
+            loadCurrentConfig();
+        }
+
+        function getPlatformName(platform) {
+            const names = {
+                'x86_64': 'x86_64 (AMD64)',
+                'rpi3': 'Raspberry Pi 3',
+                'rpi4': 'Raspberry Pi 4',
+                'rpi5': 'Raspberry Pi 5'
+            };
+            return names[platform] || platform;
+        }
+
+        // === FUNÇÕES DE CONFIG ===
+        function showConfigForm() {
+            loadCurrentConfig();
+            document.getElementById('config-form').classList.add('active');
+            
+            // Preencher form com valores atuais
+            document.getElementById('websites').value = currentConfig.websites;
+            document.getElementById('duration').value = currentConfig.duration;
+            document.getElementById('wait-time').value = currentConfig.waitTime;
+            
+            // Configurar zoom
+            if (currentConfig.zoomIn !== '0') {
+                document.getElementById('zoom-type').value = 'in';
+                document.getElementById('zoom-in').value = currentConfig.zoomIn;
+                toggleZoomOptions();
+            } else if (currentConfig.zoomOut !== '0') {
+                document.getElementById('zoom-type').value = 'out';
+                document.getElementById('zoom-out').value = currentConfig.zoomOut;
+                toggleZoomOptions();
+            } else {
+                document.getElementById('zoom-type').value = 'none';
+                toggleZoomOptions();
+            }
+        }
+
+        function hideConfigForm() {
+            document.getElementById('config-form').classList.remove('active');
+        }
+
+        function toggleZoomOptions() {
+            const zoomType = document.getElementById('zoom-type').value;
+            const zoomInGroup = document.getElementById('zoom-in-group');
+            const zoomOutGroup = document.getElementById('zoom-out-group');
+            
+            zoomInGroup.style.display = zoomType === 'in' ? 'block' : 'none';
+            zoomOutGroup.style.display = zoomType === 'out' ? 'block' : 'none';
+        }
+
+        // === FUNÇÕES DE API ===
+        async function makeAPICall(action, data = {}) {
+            showLoading('Processando...');
+            
+            try {
+                const formData = new URLSearchParams();
+                formData.append('action', action);
+                formData.append('platform', currentPlatform);
+                
+                for (const [key, value] of Object.entries(data)) {
+                    formData.append(key, value);
+                }
+                
+                const response = await fetch(CGI_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const result = await response.text();
+                return result;
+                
+            } catch (error) {
+                console.error('API Error:', error);
+                throw error;
+            } finally {
+                hideLoading();
+            }
+        }
+
+        async function loadCurrentConfig() {
+            try {
+                const result = await makeAPICall('get-config');
+                
+                try {
+                    const config = JSON.parse(result);
+                    currentConfig = config;
+                    updateConfigDisplay();
+                } catch (e) {
+                    // Se não for JSON, tentar parsear como texto
+                    parseConfigText(result);
+                }
+                
+            } catch (error) {
+                showAlert('Erro ao carregar configuração: ' + error.message, 'error');
+            }
+        }
+
+        function parseConfigText(text) {
+            const lines = text.split('\n');
+            for (const line of lines) {
+                if (line.includes('websites:')) {
+                    currentConfig.websites = line.split('websites:')[1].trim();
+                } else if (line.includes('duration:')) {
+                    currentConfig.duration = line.split('duration:')[1].trim();
+                } else if (line.includes('zoomIn:')) {
+                    currentConfig.zoomIn = line.split('zoomIn:')[1].trim();
+                } else if (line.includes('zoomOut:')) {
+                    currentConfig.zoomOut = line.split('zoomOut:')[1].trim();
+                } else if (line.includes('waitTime:')) {
+                    currentConfig.waitTime = line.split('waitTime:')[1].trim();
+                }
+            }
+            updateConfigDisplay();
+        }
+
+        function updateConfigDisplay() {
+            document.getElementById('current-websites').textContent = currentConfig.websites || 'Não configurado';
+            document.getElementById('current-duration').textContent = currentConfig.duration + 's';
+            
+            let zoomText = 'Nenhum';
+            if (currentConfig.zoomIn !== '0') {
+                zoomText = `Zoom In ${currentConfig.zoomIn}%`;
+            } else if (currentConfig.zoomOut !== '0') {
+                zoomText = `Zoom Out ${currentConfig.zoomOut}%`;
+            }
+            document.getElementById('current-zoom').textContent = zoomText;
+            
+            // Verificar status do kiosk
+            checkKioskStatus();
+        }
+
+        async function checkKioskStatus() {
+            try {
+                const result = await makeAPICall('check-status');
+                
+                const statusElement = document.getElementById('kiosk-status');
+                const statusTextElement = document.getElementById('kiosk-status-text');
+                
+                if (result.includes('running')) {
+                    statusElement.className = 'status-indicator status-running';
+                    statusTextElement.textContent = 'Executando';
+                    kioskRunning = true;
+                } else if (result.includes('stopped')) {
+                    statusElement.className = 'status-indicator status-stopped';
+                    statusTextElement.textContent = 'Parado';
+                    kioskRunning = false;
+                } else {
+                    statusElement.className = 'status-indicator status-unknown';
+                    statusTextElement.textContent = 'Desconhecido';
+                    kioskRunning = false;
+                }
+                
+            } catch (error) {
+                console.error('Erro ao verificar status:', error);
+                document.getElementById('kiosk-status').className = 'status-indicator status-unknown';
+                document.getElementById('kiosk-status-text').textContent = 'Erro';
+            }
+        }
+
+        // === FUNÇÕES DE AÇÕES ===
+        async function saveConfiguration() {
+            const form = document.getElementById('kiosk-config-form');
+            const formData = new FormData(form);
+            
+            const config = {
+                websites: formData.get('websites'),
+                duration: formData.get('duration'),
+                zoomIn: formData.get('zoom-type') === 'in' ? formData.get('zoom-in') : '0',
+                zoomOut: formData.get('zoom-type') === 'out' ? formData.get('zoom-out') : '0',
+                waitTime: formData.get('wait-time')
+            };
+            
+            // Validações
+            if (!config.websites.trim()) {
+                showAlert('Por favor, configure pelo menos um website.', 'error');
+                return;
+            }
+            
+            if (config.zoomIn !== '0' && config.zoomOut !== '0') {
+                showAlert('Não é possível configurar Zoom In e Zoom Out ao mesmo tempo!', 'error');
+                return;
+            }
+            
+            try {
+                const result = await makeAPICall('save-config', config);
+                
+                if (result.includes('success') || result.includes('sucesso')) {
+                    showAlert('Configuração salva com sucesso!', 'success');
+                    currentConfig = config;
+                    updateConfigDisplay();
+                    hideConfigForm();
+                    
+                    // Perguntar se quer reiniciar
+                    showModal(
+                        'Reiniciar Sistema?',
+                        'Configuração salva! Deseja reiniciar o sistema agora para aplicar as mudanças?',
+                        () => restartKiosk(false)
+                    );
+                } else {
+                    throw new Error(result);
+                }
+                
+            } catch (error) {
+                showAlert('Erro ao salvar configuração: ' + error.message, 'error');
+            }
+        }
+
+        function restartKiosk(showConfirmation = true) {
+            if (showConfirmation) {
+                showModal(
+                    'Reiniciar Sistema',
+                    'Tem certeza que deseja reiniciar o sistema? Esta ação pode levar alguns minutos.',
+                    () => executeRestart()
+                );
+            } else {
+                executeRestart();
+            }
+        }
+
+        async function executeRestart() {
+            hideModal();
+            
+            try {
+                showAlert('Iniciando reinicialização do sistema...', 'info');
+                const result = await makeAPICall('restart-system');
+                
+                showAlert('Sistema reiniciando... Aguarde alguns minutos e recarregue a página.', 'warning');
+                
+                // Desabilitar interface por 2 minutos
+                setTimeout(() => {
+                    window.location.reload();
+                }, 120000);
+                
+            } catch (error) {
+                showAlert('Erro ao reiniciar sistema: ' + error.message, 'error');
+            }
+        }
+
+        function stopKiosk() {
+            showModal(
+                'Parar Kiosk',
+                'Tem certeza que deseja parar o kiosk? O sistema ficará disponível para manutenção.',
+                () => executeStopKiosk()
+            );
+        }
+
+        async function executeStopKiosk() {
+            hideModal();
+            
+            try {
+                const result = await makeAPICall('stop-kiosk');
+                
+                if (result.includes('success') || result.includes('parado')) {
+                    showAlert('Kiosk parado com sucesso!', 'success');
+                    kioskRunning = false;
+                    checkKioskStatus();
+                } else {
+                    throw new Error(result);
+                }
+                
+            } catch (error) {
+                showAlert('Erro ao parar kiosk: ' + error.message, 'error');
+            }
+        }
+
+        // === GERENCIADOR DE ARQUIVOS ===
+        function showFileManager() {
+            document.getElementById('file-manager').style.display = 'block';
+            refreshFileList();
+        }
+
+        function hideFileManager() {
+            document.getElementById('file-manager').style.display = 'none';
+        }
+
+        async function refreshFileList() {
+            try {
+                const result = await makeAPICall('list-files');
+                const fileList = document.getElementById('file-list');
+                
+                if (result.includes('[]') || result.trim() === '') {
+                    fileList.innerHTML = '<div class="file-item"><span>📁 Nenhum arquivo encontrado</span></div>';
+                    return;
+                }
+                
+                const files = result.split('\n').filter(f => f.trim());
+                let html = '';
+                
+                for (const file of files) {
+                    if (file.trim()) {
+                        const fileName = file.trim();
+                        const extension = fileName.split('.').pop();
+                        const icon = getFileIcon(extension);
+                        
+                        html += `
+                            <div class="file-item">
+                                <span>${icon} ${fileName}</span>
+                                <div class="file-actions">
+                                    <button class="btn btn-primary" onclick="downloadFile('${fileName}')">📥</button>
+                                    <button class="btn btn-danger" onclick="deleteFile('${fileName}')">🗑️</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+                
+                fileList.innerHTML = html || '<div class="file-item"><span>📁 Nenhum arquivo encontrado</span></div>';
+                
+            } catch (error) {
+                showAlert('Erro ao listar arquivos: ' + error.message, 'error');
+            }
+        }
+
+        function getFileIcon(extension) {
+            const icons = {
+                'mp4': '🎥', 'avi': '🎥', 'mkv': '🎥', 'mov': '🎥',
+                'jpg': '🖼️', 'jpeg': '🖼️', 'png': '🖼️', 'gif': '🖼️',
+                'txt': '📄', 'html': '🌐', 'css': '🎨', 'js': '⚡'
+            };
+            return icons[extension.toLowerCase()] || '📄';
+        }
+
+        async function uploadFiles() {
+            const fileInput = document.getElementById('file-upload');
+            const files = fileInput.files;
+            
+            if (files.length === 0) {
+                showAlert('Selecione pelo menos um arquivo para upload.', 'warning');
+                return;
+            }
+            
+            for (const file of files) {
+                try {
+                    const formData = new FormData();
+                    formData.append('action', 'upload-file');
+                    formData.append('platform', currentPlatform);
+                    formData.append('file', file);
+                    
+                    showLoading(`Enviando ${file.name}...`);
+                    
+                    const response = await fetch(CGI_URL, {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+                    
+                    const result = await response.text();
+                    
+                    if (result.includes('success')) {
+                        showAlert(`Arquivo ${file.name} enviado com sucesso!`, 'success');
+                    } else {
+                        throw new Error(result);
+                    }
+                    
+                } catch (error) {
+                    showAlert(`Erro ao enviar ${file.name}: ${error.message}`, 'error');
+                }
+            }
+            
+            hideLoading();
+            fileInput.value = '';
+            refreshFileList();
+        }
+
+        async function deleteFile(fileName) {
+            showModal(
+                'Excluir Arquivo',
+                `Tem certeza que deseja excluir o arquivo "${fileName}"? Esta ação não pode ser desfeita.`,
+                () => executeDeleteFile(fileName)
+            );
+        }
+
+        async function executeDeleteFile(fileName) {
+            hideModal();
+            
+            try {
+                const result = await makeAPICall('delete-file', { fileName });
+                
+                if (result.includes('success')) {
+                    showAlert(`Arquivo ${fileName} excluído com sucesso!`, 'success');
+                    refreshFileList();
+                } else {
+                    throw new Error(result);
+                }
+                
+            } catch (error) {
+                showAlert(`Erro ao excluir arquivo: ${error.message}`, 'error');
+            }
+        }
+
+        function downloadFile(fileName) {
+            window.open(`/files/${fileName}`, '_blank');
+        }
+
+        // === INFORMAÇÕES DO SISTEMA ===
+        async function showSystemInfo() {
+            document.getElementById('system-info').style.display = 'block';
+            document.getElementById('system-details').innerHTML = '<p>🔄 Carregando informações...</p>';
+            
+            try {
+                const result = await makeAPICall('system-info');
+                document.getElementById('system-details').innerHTML = `<pre style="background: white; padding: 15px; border-radius: 8px; color: #2c3e50; font-family: monospace;">${result}</pre>`;
+            } catch (error) {
+                document.getElementById('system-details').innerHTML = `<p style="color: #e74c3c;">Erro ao carregar informações: ${error.message}</p>`;
+            }
+        }
+
+        function hideSystemInfo() {
+            document.getElementById('system-info').style.display = 'none';
+        }
+
+        // === LOGS ===
+        async function showLogs() {
+            document.getElementById('logs-container').style.display = 'block';
+            refreshLogs();
+        }
+
+        function hideLogs() {
+            document.getElementById('logs-container').style.display = 'none';
+        }
+
+        async function refreshLogs() {
+            document.getElementById('logs-content').textContent = 'Carregando logs...';
+            
+            try {
+                const result = await makeAPICall('get-logs');
+                document.getElementById('logs-content').textContent = result || 'Nenhum log disponível';
+            } catch (error) {
+                document.getElementById('logs-content').textContent = `Erro ao carregar logs: ${error.message}`;
+            }
+        }
+
+        // === MODAL ===
+        function showModal(title, message, confirmCallback) {
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-message').textContent = message;
+            document.getElementById('confirmation-modal').classList.add('active');
+            
+            pendingAction = confirmCallback;
+        }
+
+        function hideModal() {
+            document.getElementById('confirmation-modal').classList.remove('active');
+            pendingAction = null;
+        }
+
+        function confirmAction() {
+            if (pendingAction && typeof pendingAction === 'function') {
+                pendingAction();
+            }
+            hideModal();
+        }
+
+        // === FUNÇÕES DE UI ===
+        function showLoading(text = 'Processando...') {
+            document.getElementById('loading-text').textContent = text;
+            document.getElementById('loading').classList.add('active');
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').classList.remove('active');
+        }
+
+        function showAlert(message, type = 'info') {
+            const alert = document.getElementById('alert-container');
+            alert.textContent = message;
+            alert.className = `alert alert-${type} active`;
+            
+            setTimeout(() => {
+                alert.classList.remove('active');
+            }, 5000);
+        }
+
+        // === EVENT LISTENERS ===
+        document.getElementById('kiosk-config-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            saveConfiguration();
+        });
+
+        // Fechar modal com ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                hideModal();
+                hideConfigForm();
+                hideFileManager();
+                hideSystemInfo();
+                hideLogs();
+            }
+        });
+
+        // Fechar modal clicando fora
+        document.getElementById('confirmation-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideModal();
+            }
+        });
+
+        // === INICIALIZAÇÃO ===
+        window.addEventListener('load', function() {
+            console.log('Kiosk Manager carregado!');
+            loadCurrentConfig();
+            
+            // Verificar status periodicamente
+            setInterval(checkKioskStatus, 30000); // A cada 30 segundos
+        });
+
+        // Atalhos de teclado
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'k') {
+                e.preventDefault();
+                showConfigForm();
+            }
+            if (e.ctrlKey && e.key === 'r') {
+                e.preventDefault();
+                restartKiosk();
+            }
+        });
+    </script>
+</body>
+</html>
