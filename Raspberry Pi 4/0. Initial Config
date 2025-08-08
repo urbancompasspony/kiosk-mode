@@ -1,5 +1,15 @@
 UBUNTU SERVER 22.04 LTS and RPi4!
 
+sudo nano /etc/default/locale
+
+LANG="pt_BR.UTF-8"
+LANGUAGE="pt_BR:pt:en"
+LC_ALL="pt_BR.UTF-8"
+
+source /etc/default/locale
+export LANG="pt_BR.UTF-8"
+export LC_ALL="pt_BR.UTF-8"
+
 sudo apt update && sudo apt upgrade -y && sudo apt autoremove
 
 sudo apt purge needrestart cloud-init snapd unattended-upgrades plank deja-dup evolution evolution-data-server bluez blueman bluetooth -y
