@@ -10,6 +10,9 @@ source /etc/default/locale
 export LANG="pt_BR.UTF-8"
 export LC_ALL="pt_BR.UTF-8"
 
+sudo nano /etc/apache2/conf-available/charset.conf
+AddDefaultCharset UTF-8
+
 sudo apt install network-manager && sudo apt purge dnsmasq-base
 
 sudo systemctl stop systemd-resolved && sudo systemctl disable systemd-resolved && sudo systemctl mask systemd-resolved && sudo unlink /etc/resolv.conf
