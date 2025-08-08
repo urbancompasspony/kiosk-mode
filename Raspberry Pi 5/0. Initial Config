@@ -10,6 +10,9 @@ source /etc/default/locale
 export LANG="pt_BR.UTF-8"
 export LC_ALL="pt_BR.UTF-8"
 
+sudo nano /etc/apache2/conf-available/charset.conf
+AddDefaultCharset UTF-8
+
 sudo apt update && sudo apt upgrade -y && sudo apt autoremove
 
 sudo apt purge needrestart cloud-init snapd unattended-upgrades plank deja-dup evolution evolution-data-server bluez blueman bluetooth -y
